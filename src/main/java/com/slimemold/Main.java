@@ -51,7 +51,7 @@ public class Main extends Application {
             for (int j = 0; j < boardWidth; j++) {
                 Cell cell = board.getCell(i, j);
                 if (cell == null) {
-                    pixelWriter.setColor(j, i, Color.BLACK);
+                    pixelWriter.setColor(j, i, (Color) this.graphics.getFill());
                 } else {
                     pixelWriter.setColor(i, j, cell.getColor());
                 }
