@@ -16,8 +16,8 @@ public class Main extends Application {
     Canvas canvas;
     GraphicsContext graphics;
 
-    int boardWidth = 320;
-    int boardHeight = 180;
+    int boardWidth = 640;
+    int boardHeight = 320;
     Board board = new Board(boardWidth, boardHeight);
 
     public static void main(String[] args) {
@@ -27,18 +27,16 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         this.window = new BorderPane();
-        this.canvas = new Canvas(320, 180);
+        this.canvas = new Canvas(boardWidth, boardHeight);
         this.graphics = canvas.getGraphicsContext2D();
 
         Scene scene = new Scene(this.window);
         this.window.setCenter(this.canvas);
 
         stage.setScene(scene);
-        board.setCell(160, 90, new Cell(0, Color.AQUA));
+        board.setCell(320, 160, new Cell(0, Color.AQUA));
         render();
         stage.show();
-
-
     }
 
     private void render() {
@@ -47,16 +45,15 @@ public class Main extends Application {
 
         PixelWriter pixelWriter = canvas.getGraphicsContext2D().getPixelWriter();
 
-        for (int i = 0; i < boardHeight; i++) {
-            for (int j = 0; j < boardWidth; j++) {
+        for (int i = 0; i < boardWidth; i++) {
+            for (int j = 0; j < boardHeight; j++) {
                 Cell cell = board.getCell(i, j);
                 if (cell == null) {
-                    pixelWriter.setColor(j, i, (Color) this.graphics.getFill());
+                    pixelWriter.setColor(i, j, (Color) this.graphics.getFill());
                 } else {
                     pixelWriter.setColor(i, j, cell.getColor());
                 }
             }
         }
-
     }
 }

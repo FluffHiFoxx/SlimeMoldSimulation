@@ -14,6 +14,13 @@ public class Cell {
         this.color = color;
     }
 
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
 
     public Color getColor() {
         return color;
