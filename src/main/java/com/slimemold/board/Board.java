@@ -1,0 +1,28 @@
+package com.slimemold.board;
+
+import javafx.scene.paint.Color;
+
+public class Board {
+
+    private  Cell[][] board;
+
+    public Board(int width, int height) {
+        this.board = new Cell[height][width];
+    }
+
+    public Cell[][] getBoard() {
+        return board;
+    }
+
+    public void setBoard(Cell[][] board) {
+        this.board = board;
+    }
+
+    public Cell getCell(int row, int col){
+        return board[row][col];
+    }
+
+    public void setCell(int row, int col, Cell cell){
+        board[row][col] = cell;
+    }
+}

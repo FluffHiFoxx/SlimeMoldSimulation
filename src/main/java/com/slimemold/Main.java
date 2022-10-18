@@ -1,13 +1,13 @@
 package com.slimemold;
 
+import com.slimemold.board.Board;
+import com.slimemold.board.Cell;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -16,6 +16,10 @@ public class Main extends Application {
     Canvas canvas;
     GraphicsContext graphics;
 
+    int boardWidth = 320;
+    int boardHeight = 180;
+    Board board = new Board(boardWidth, boardHeight);
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -23,32 +27,36 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         this.window = new BorderPane();
-        this.canvas = new Canvas(320,180);
+        this.canvas = new Canvas(320, 180);
         this.graphics = canvas.getGraphicsContext2D();
-        this.graphics.setFill(Color.BLACK);
-        this.graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
         Scene scene = new Scene(this.window);
         this.window.setCenter(this.canvas);
-/*
-        GridPane root = new GridPane();
-        root.setGridLinesVisible(true);
-        final double numCols = canvas.getWidth();
-        final double numRows =  canvas.getHeight();
-        for (int i = 0; i < numCols; i++) {
-            ColumnConstraints colConst = new ColumnConstraints();
-          //  colConst.setPercentWidth(100.0 / numCols);
-            colConst.setPrefWidth(numCols);
-            root.getColumnConstraints().add(colConst);
-        }
-        for (int i = 0; i < numRows; i++) {
-            RowConstraints rowConst = new RowConstraints();
-            //rowConst.setPercentHeight(100.0 / numRows);
-            rowConst.setPrefHeight(numRows);
-            root.getRowConstraints().add(rowConst);
-        }
-        stage.setScene(new Scene(root, 800, 600));
+
+        stage.setScene(scene);
+        board.setCell(160, 90, new Cell(0, Color.AQUA));
+        render();
         stage.show();
-        */
+
+
+    }
+
+    private void render() {
+        this.graphics.setFill(Color.BLACK);
+        this.graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        PixelWriter pixelWriter = canvas.getGraphicsContext2D().getPixelWriter();
+
+        for (int i = 0; i < boardHeight; i++) {
+            for (int j = 0; j < boardWidth; j++) {
+                Cell cell = board.getCell(i, j);
+                if (cell == null) {
+                    pixelWriter.setColor(j, i, Color.BLACK);
+                } else {
+                    pixelWriter.setColor(i, j, cell.getColor());
+                }
+            }
+        }
 
     }
 }
