@@ -46,7 +46,6 @@ public class Main extends Application {
 
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
-            render();
             board.moveCells();
             render();
         }));

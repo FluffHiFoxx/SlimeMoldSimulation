@@ -64,4 +64,8 @@ public class Cell {
     public Color getColor() {
         return color;
     }
+
+    public void reverseDirection(int i) {
+        direction[i] = -direction[i];
+    }
 }
