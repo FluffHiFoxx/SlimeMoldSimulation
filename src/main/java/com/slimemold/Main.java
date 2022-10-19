@@ -1,7 +1,9 @@
 package com.slimemold;
-
 import com.slimemold.board.Board;
 import com.slimemold.board.Cell;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -10,6 +12,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Main extends Application {
     BorderPane window;
@@ -34,9 +37,20 @@ public class Main extends Application {
         this.window.setCenter(this.canvas);
 
         stage.setScene(scene);
-        board.setCell(320, 160, new Cell(0, Color.AQUA));
+        board.setCell(159, 320, new Cell(new int[]{-1,1},Color.WHITE));
+        board.setCell(160, 320, new Cell(new int[]{1,1},Color.WHITE));
+        board.setCell(159, 319, new Cell(new int[]{-1,-1},Color.WHITE));
+        board.setCell(160, 319, new Cell(new int[]{1,-1},Color.WHITE));
         render();
         stage.show();
+
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.025), e -> {
+            board.moveCells();
+            render();
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.playFromStart();
     }
 
     private void render() {
@@ -45,13 +59,13 @@ public class Main extends Application {
 
         PixelWriter pixelWriter = canvas.getGraphicsContext2D().getPixelWriter();
 
-        for (int i = 0; i < boardWidth; i++) {
-            for (int j = 0; j < boardHeight; j++) {
-                Cell cell = board.getCell(i, j);
+        for (int col = 0; col < boardWidth; col++) {
+            for (int row = 0; row < boardHeight; row++) {
+                Cell cell = board.getCell(row, col);
                 if (cell == null) {
-                    pixelWriter.setColor(i, j, (Color) this.graphics.getFill());
+                    pixelWriter.setColor(col, row, (Color) this.graphics.getFill());
                 } else {
-                    pixelWriter.setColor(i, j, cell.getColor());
+                    pixelWriter.setColor(col, row, cell.getColor());
                 }
             }
         }

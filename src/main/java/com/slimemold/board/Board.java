@@ -1,6 +1,8 @@
 package com.slimemold.board;
 
-import javafx.scene.paint.Color;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Board {
 
@@ -11,7 +13,21 @@ public class Board {
     }
 
     public void moveCells() {
-
+        Set<Cell> alreadyMovedCells = new HashSet<>();
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                Cell cell = getCell(row, col);
+                if (board[row][col] != null && !alreadyMovedCells.contains(cell)) {
+                    int[] difference = cell.moveToMake();
+                    System.out.println("\nCell: " + cell);
+                    System.out.println("coordinate difference: " + Arrays.toString(difference));
+                    System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
+                    setCell(row + difference[0], col + difference[1], cell);
+                    setCell(row, col, null);
+                    alreadyMovedCells.add(cell);
+                }
+            }
+        }
     }
 
     public Cell[][] getBoard() {
@@ -22,11 +38,11 @@ public class Board {
         this.board = board;
     }
 
-    public Cell getCell(int row, int col){
-        return board[col][row];
+    public Cell getCell(int row, int col) {
+        return board[row][col];
     }
 
-    public void setCell(int row, int col, Cell cell){
-        board[col][row] = cell;
+    public void setCell(int row, int col, Cell cell) {
+        board[row][col] = cell;
     }
 }
