@@ -1,7 +1,9 @@
 package com.slimemold;
-
 import com.slimemold.board.Board;
 import com.slimemold.board.Cell;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -10,6 +12,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Main extends Application {
     BorderPane window;
@@ -19,6 +22,7 @@ public class Main extends Application {
     int boardWidth = 640;
     int boardHeight = 320;
     Board board = new Board(boardWidth, boardHeight);
+
 
     public static void main(String[] args) {
         launch(args);
@@ -35,8 +39,21 @@ public class Main extends Application {
 
         stage.setScene(scene);
         board.setCell(320, 160, new Cell(0, Color.AQUA));
+
+
         render();
         stage.show();
+
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), e -> {
+            System.out.println(
+                    "timeLineTeszt");
+            render();
+        }
+
+        ));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.playFromStart();
     }
 
     private void render() {
@@ -53,6 +70,7 @@ public class Main extends Application {
                 } else {
                     pixelWriter.setColor(i, j, cell.getColor());
                 }
+
             }
         }
     }

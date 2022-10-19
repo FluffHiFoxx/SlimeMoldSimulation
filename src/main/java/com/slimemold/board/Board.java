@@ -1,7 +1,5 @@
 package com.slimemold.board;
 
-import javafx.scene.paint.Color;
-
 public class Board {
 
     private Cell[][] board;
@@ -14,6 +12,7 @@ public class Board {
 
     }
 
+
     public Cell[][] getBoard() {
         return board;
     }
@@ -22,11 +21,11 @@ public class Board {
         this.board = board;
     }
 
-    public Cell getCell(int row, int col){
+    public Cell getCell(int row, int col) {
         return board[col][row];
     }
 
-    public void setCell(int row, int col, Cell cell){
+    public void setCell(int row, int col, Cell cell) {
         board[col][row] = cell;
     }
 }
