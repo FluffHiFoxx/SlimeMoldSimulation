@@ -37,22 +37,23 @@ public class Main extends Application {
         this.window.setCenter(this.canvas);
 
         stage.setScene(scene);
-        board.setCell(160, 320, new Cell(Color.AQUA));
-        board.setCell(319, 0, new Cell(Color.AQUA));
-        board.setCell(0, 639, new Cell(Color.AQUA));
-        board.setCell(0, 0, new Cell(Color.AQUA));
-        board.setCell(319, 639, new Cell(Color.AQUA));
+        board.setCell(160, 320, new Cell(new int[]{1,1},Color.AQUA));
+        // debug static write
+//        board.setCell(160, 330, new Cell(Color.AQUA));
+//        board.setCell(170, 330, new Cell(Color.AQUA));
+//        board.setCell(319, 639, new Cell(Color.AQUA));
+//        board.setCell(0, 639, new Cell(Color.AQUA));
+//        board.setCell(0, 0, new Cell(Color.AQUA));
+//        board.setCell(319, 0, new Cell(Color.AQUA));
         render();
         stage.show();
 
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), e -> {
-            System.out.println(
-                    "timeLineTeszt");
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             render();
-        }
-
-        ));
+            board.moveCells();
+            render();
+        }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.playFromStart();
     }

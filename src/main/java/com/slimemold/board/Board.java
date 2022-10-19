@@ -1,5 +1,7 @@
 package com.slimemold.board;
 
+import java.util.Arrays;
+
 public class Board {
 
     private Cell[][] board;
@@ -13,8 +15,10 @@ public class Board {
             for (int col = 0; col < board[row].length; col++) {
                 if (board[row][col] != null) {
                     Cell cell = getCell(row, col);
-                    int[] coordinates = cell.moveToMake();
-                    setCell(coordinates[0], coordinates[1], cell);
+                    int[] difference = cell.moveToMake();
+                    System.out.println("coordinate difference: " + Arrays.toString(difference));
+                    System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
+                    setCell(row + difference[0], col + difference[1], cell);
                     setCell(row, col, null);
                 }
             }

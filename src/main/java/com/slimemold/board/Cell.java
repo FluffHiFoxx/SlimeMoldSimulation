@@ -40,15 +40,20 @@ public class Cell {
         int[] firstMove;
         int[] secondMove;
         if (x < y) {
-            secondMove = new int[]{x - 1, y - 1 > 0 ? y - 1 : y};
+            secondMove = new int[]{x - 1, y > 0 ? y - 1 : y};
+        } else if (y < x) {
+            secondMove = new int[]{x > 0 ? x - 1 : x, y - 1};
         } else {
-            secondMove = new int[]{x - 1 > 0 ? x - 1 : x, y - 1};
+            secondMove = new int[]{x > 0 ? x - 1 : x, y > 0 ? y - 1 : y};
         }
-        secondMove[0] = (int) (secondMove[0] * Math.pow(movesLeft[0], 0));
-        secondMove[1] = (int) (secondMove[1] * Math.pow(movesLeft[1], 0));
-        firstMove = new int[]{x - secondMove[0], y - secondMove[1]};
-        firstMove[0] = (int) (firstMove[0] * Math.pow(movesLeft[0], 0));
-        firstMove[1] = (int) (firstMove[1] * Math.pow(movesLeft[1], 0));
+        secondMove[0] = x == 0 ? 0 : (secondMove[0] * (x/movesLeft[0]));
+        secondMove[1] = y == 0 ? 0 : (secondMove[1] * (y/movesLeft[1]));
+        firstMove = new int[]{movesLeft[0] - secondMove[0], movesLeft[1] - secondMove[1]};
+        // debug print in real time
+//        System.out.println("direction: " + Arrays.toString(direction));
+//        System.out.println("moves left: " + Arrays.toString(movesLeft));
+//        System.out.println("first: " + Arrays.toString(firstMove));
+//        System.out.println("second: " + Arrays.toString(secondMove));
         movesLeft = secondMove;
         return firstMove;
     }
