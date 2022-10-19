@@ -49,11 +49,6 @@ public class Cell {
         secondMove[0] = x == 0 ? 0 : (secondMove[0] * (x/movesLeft[0]));
         secondMove[1] = y == 0 ? 0 : (secondMove[1] * (y/movesLeft[1]));
         firstMove = new int[]{movesLeft[0] - secondMove[0], movesLeft[1] - secondMove[1]};
-        // debug print in real time
-//        System.out.println("direction: " + Arrays.toString(direction));
-//        System.out.println("moves left: " + Arrays.toString(movesLeft));
-//        System.out.println("first: " + Arrays.toString(firstMove));
-//        System.out.println("second: " + Arrays.toString(secondMove));
         movesLeft = secondMove;
         return firstMove;
     }
