@@ -14,17 +14,35 @@ public class Board {
 
     public void moveCells() {
         Set<Cell> alreadyMovedCells = new HashSet<>();
-        for (int row = 0; row < board.length; row++) {
-            for (int col = 0; col < board[row].length; col++) {
+        final int rowMax = board.length;
+        final int colMax = board[0].length;
+        for (int row = 0; row < rowMax; row++) {
+            for (int col = 0; col < colMax; col++) {
                 Cell cell = getCell(row, col);
                 if (board[row][col] != null && !alreadyMovedCells.contains(cell)) {
-                    int[] difference = cell.moveToMake();
-                    System.out.println("\nCell: " + cell);
-                    System.out.println("coordinate difference: " + Arrays.toString(difference));
-                    System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
-                    setCell(row + difference[0], col + difference[1], cell);
-                    setCell(row, col, null);
-                    alreadyMovedCells.add(cell);
+                    try{
+                        int[] difference = cell.moveToMake();
+                        System.out.println("\nCell: " + cell);
+                        System.out.println("coordinate difference: " + Arrays.toString(difference));
+                        System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
+                        setCell(row + difference[0], col + difference[1], cell);
+                        setCell(row, col, null);
+                        alreadyMovedCells.add(cell);
+                    } catch (ArrayIndexOutOfBoundsException e){
+                        if(row == 0 || row == rowMax -1){
+                            cell.reverseDirection(0);
+                        } else if (col == 0 || col == colMax -1) {
+                            cell.reverseDirection(1);
+                        }
+                        int[] difference = cell.moveToMake();
+                        System.out.println("\nCell: " + cell);
+                        System.out.println("coordinate difference: " + Arrays.toString(difference));
+                        System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
+                        setCell(row + difference[0], col + difference[1], cell);
+                        setCell(row, col, null);
+                        alreadyMovedCells.add(cell);
+                    }
+
                 }
             }
         }
