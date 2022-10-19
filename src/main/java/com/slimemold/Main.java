@@ -1,4 +1,5 @@
 package com.slimemold;
+
 import com.slimemold.board.Board;
 import com.slimemold.board.Cell;
 import javafx.animation.Animation;

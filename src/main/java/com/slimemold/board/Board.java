@@ -20,7 +20,7 @@ public class Board {
             for (int col = 0; col < colMax; col++) {
                 Cell cell = getCell(row, col);
                 if (board[row][col] != null && !alreadyMovedCells.contains(cell)) {
-                    try{
+                    try {
                         int[] difference = cell.moveToMake();
                         System.out.println("\nCell: " + cell);
                         System.out.println("coordinate difference: " + Arrays.toString(difference));
@@ -28,11 +28,14 @@ public class Board {
                         setCell(row + difference[0], col + difference[1], cell);
                         setCell(row, col, null);
                         alreadyMovedCells.add(cell);
-                    } catch (ArrayIndexOutOfBoundsException e){
-                        if(row == 0 || row == rowMax -1){
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        if ((col == 0 || col >= colMax - 1) && (row == 0 || row >= rowMax - 1)) {
                             cell.reverseDirection(0);
-                        } else if (col == 0 || col == colMax -1) {
                             cell.reverseDirection(1);
+                        } else if (col == 0 || col >= colMax - 1) {
+                            cell.reverseDirection(1);
+                        } else if (row == 0 || row >= rowMax - 1) {
+                            cell.reverseDirection(0);
                         }
                         int[] difference = cell.moveToMake();
                         System.out.println("\nCell: " + cell);
