@@ -34,7 +34,11 @@ public class Main extends Application {
         this.window.setCenter(this.canvas);
 
         stage.setScene(scene);
-        board.setCell(320, 160, new Cell(0, Color.AQUA));
+        board.setCell(160, 320, new Cell(Color.AQUA));
+        board.setCell(319, 0, new Cell(Color.AQUA));
+        board.setCell(0, 639, new Cell(Color.AQUA));
+        board.setCell(0, 0, new Cell(Color.AQUA));
+        board.setCell(319, 639, new Cell(Color.AQUA));
         render();
         stage.show();
     }
@@ -45,13 +49,13 @@ public class Main extends Application {
 
         PixelWriter pixelWriter = canvas.getGraphicsContext2D().getPixelWriter();
 
-        for (int i = 0; i < boardWidth; i++) {
-            for (int j = 0; j < boardHeight; j++) {
-                Cell cell = board.getCell(i, j);
+        for (int col = 0; col < boardWidth; col++) {
+            for (int row = 0; row < boardHeight; row++) {
+                Cell cell = board.getCell(row, col);
                 if (cell == null) {
-                    pixelWriter.setColor(i, j, (Color) this.graphics.getFill());
+                    pixelWriter.setColor(col, row, (Color) this.graphics.getFill());
                 } else {
-                    pixelWriter.setColor(i, j, cell.getColor());
+                    pixelWriter.setColor(col, row, cell.getColor());
                 }
             }
         }
