@@ -11,4 +11,12 @@ public class Tile {
     private final Set<LiveCell> liveCells = new HashSet<>();
     private Trail trail;
     private static Color BG_COLOR;
+
+    public Trail getTrail() {
+        return trail;
+    }
+
+    public void setTrail(Trail trail) {
+        this.trail = trail;
+    }
 }
