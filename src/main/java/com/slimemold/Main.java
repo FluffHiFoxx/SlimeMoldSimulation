@@ -1,6 +1,7 @@
 package com.slimemold;
 
 import com.slimemold.board.Board;
+import com.slimemold.board.cell.Cell;
 import com.slimemold.board.cell.LiveCell;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -38,35 +39,12 @@ public class Main extends Application {
         this.window.setCenter(this.canvas);
 
         stage.setScene(scene);
-        board.setCell(159, 320, new LiveCell(Color.WHITE));
         board.setCell(160, 320, new LiveCell(Color.WHITE));
-        board.setCell(159, 319, new LiveCell(Color.WHITE));
-        board.setCell(160, 319, new LiveCell(Color.WHITE));
-
-        board.setCell(159, 330, new LiveCell(Color.WHITE));
-        board.setCell(160, 330, new LiveCell(Color.WHITE));
-        board.setCell(159, 329, new LiveCell(Color.WHITE));
-        board.setCell(160, 329, new LiveCell(Color.WHITE));
-
-        board.setCell(159, 310, new LiveCell(Color.WHITE));
-        board.setCell(160, 310, new LiveCell(Color.WHITE));
-        board.setCell(159, 309, new LiveCell(Color.WHITE));
-        board.setCell(160, 309, new LiveCell(Color.WHITE));
-
-        board.setCell(169, 320, new LiveCell(Color.WHITE));
-        board.setCell(170, 320, new LiveCell(Color.WHITE));
-        board.setCell(169, 319, new LiveCell(Color.WHITE));
-        board.setCell(170, 319, new LiveCell(Color.WHITE));
-
-        board.setCell(149, 320, new LiveCell(Color.WHITE));
-        board.setCell(150, 320, new LiveCell(Color.WHITE));
-        board.setCell(149, 319, new LiveCell(Color.WHITE));
-        board.setCell(150, 319, new LiveCell(Color.WHITE));
         render();
         stage.show();
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.025), e -> {
-            board.moveCells();
+            board.moveTileContent();
             render();
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -81,11 +59,11 @@ public class Main extends Application {
 
         for (int col = 0; col < boardWidth; col++) {
             for (int row = 0; row < boardHeight; row++) {
-                LiveCell liveCell = (LiveCell) board.getCell(row, col);
-                if (liveCell == null) {
-                    pixelWriter.setColor(col, row, (Color) this.graphics.getFill());
+                Cell cell = board.getCell(row, col);
+                if (cell != null) {
+                    pixelWriter.setColor(col, row, cell.getColor());
                 } else {
-                    pixelWriter.setColor(col, row, liveCell.getColor());
+                    pixelWriter.setColor(col, row, (Color) this.graphics.getFill());
                 }
             }
         }

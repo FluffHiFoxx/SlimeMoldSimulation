@@ -39,19 +39,20 @@ public class LiveCell extends Cell {
         return firstMove;
     }
 
-    public int[] getDirection() {
-        return direction;
-    }
-
-    public void setDirection(int[] direction) {
-        this.direction = direction;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
     public void reverseDirection(int i) {
         direction[i] = -direction[i];
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LiveCell liveCell = (LiveCell) o;
+        return Arrays.equals(movesLeft, liveCell.movesLeft);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(movesLeft);
     }
 }

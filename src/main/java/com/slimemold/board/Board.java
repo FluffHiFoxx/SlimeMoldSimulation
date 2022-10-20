@@ -11,46 +11,52 @@ import java.util.Set;
 public class Board {
 
     private Cell[][] board;
+    private Set<LiveCell> alreadyMovedLiveCells;
 
     public Board(int width, int height) {
-        this.board = new LiveCell[height][width];
+        this.board = new Cell[height][width];
     }
 
-    public void moveCells() {
-        Set<LiveCell> alreadyMovedLiveCells = new HashSet<>();
+    public void moveTileContent() {
+        this.alreadyMovedLiveCells = new HashSet<>();
         final int rowMax = board.length;
         final int colMax = board[0].length;
         for (int row = 0; row < rowMax; row++) {
             for (int col = 0; col < colMax; col++) {
-                LiveCell liveCell = (LiveCell) getTile(row, col);
-                if (board[row][col] != null && !alreadyMovedLiveCells.contains(liveCell)) {
-                    try {
-                        int[] difference = liveCell.moveToMake();
-                        System.out.println("\nCell: " + liveCell);
-                        System.out.println("coordinate difference: " + Arrays.toString(difference));
-                        System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
-                        setCell(row + difference[0], col + difference[1], liveCell);
-                        setCell(row, col, null);
-                        alreadyMovedLiveCells.add(liveCell);
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        if ((col <= 0 || col >= colMax - 1) && (row <= 0 || row >= rowMax - 1)) {
-                            liveCell.reverseDirection(0);
-                            liveCell.reverseDirection(1);
-                        } else if (col <= 0 || col >= colMax - 1) {
-                            liveCell.reverseDirection(1);
-                        } else if (row <= 0 || row >= rowMax - 1) {
-                            liveCell.reverseDirection(0);
-                        }
-                        int[] difference = liveCell.moveToMake();
-                        System.out.println("\nCell: " + liveCell);
-                        System.out.println("coordinate difference: " + Arrays.toString(difference));
-                        System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
-                        setCell(row + difference[0], col + difference[1], liveCell);
-                        setCell(row, col, null);
-                        alreadyMovedLiveCells.add(liveCell);
-                    }
-
+                Cell cell = board[row][col];
+                if (cell instanceof LiveCell) {
+                    moveCells(rowMax, colMax, row, col, (LiveCell) cell);
                 }
+            }
+        }
+    }
+
+    private void moveCells(int rowMax, int colMax, int row, int col, LiveCell liveCell) {
+        if (!alreadyMovedLiveCells.contains(liveCell)) {
+            try {
+                int[] difference = liveCell.moveToMake();
+                System.out.println("\nCell: " + liveCell);
+                System.out.println("coordinate difference: " + Arrays.toString(difference));
+                System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
+                board[row + difference[0]][col + difference[1]] = liveCell;
+                board[row][col] = null;
+                alreadyMovedLiveCells.add(liveCell);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                if ((col <= 0 || col >= colMax - 1) && (row <= 0 || row >= rowMax - 1)) {
+                    liveCell.reverseDirection(0);
+                    liveCell.reverseDirection(1);
+                } else if (col <= 0 || col >= colMax - 1) {
+                    liveCell.reverseDirection(1);
+                } else if (row <= 0 || row >= rowMax - 1) {
+                    liveCell.reverseDirection(0);
+                }
+                int[] difference = liveCell.moveToMake();
+                System.out.println("\nCell: " + liveCell);
+                System.out.println("coordinate difference: " + Arrays.toString(difference));
+                System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
+                board[row + difference[0]][col + difference[1]] = liveCell;
+                board[row][col] = null;
+                alreadyMovedLiveCells.add(liveCell);
             }
         }
     }
@@ -59,26 +65,26 @@ public class Board {
         return board;
     }
 
-    public void setBoard(LiveCell[][] board) {
+    public void setBoard(Cell[][] board) {
         this.board = board;
     }
 
-    public Cell getTile(int row, int col) {
+    public Cell getCell(int row, int col) {
         return board[row][col];
     }
 
-    public void setCell(int row, int col, LiveCell liveCell) {
-        board[row][col] = liveCell;
+    public void setCell(int row, int col, Cell cell) {
+        board[row][col] = cell;
     }
 
-    public void fadeTheTrails(){
+    public void fadeTheTrails() {
         final int rowMax = board.length;
         final int colMax = board[0].length;
-        for (int i = 0; i < rowMax; i++) {
-            for (int j = 0; j < colMax; j++) {
-                Trail trail = (Trail) getTile(i,j);
-                if(trail != null && trail.getIntensity() > 1){
-                    trail.setIntensity(trail.getIntensity() -1);
+        for (int row = 0; row < rowMax; row++) {
+            for (int col = 0; col < colMax; col++) {
+                Trail trail = (Trail) board[row][col];
+                if (trail != null && trail.getIntensity() > 1) {
+                    trail.setIntensity(trail.getIntensity() - 1);
                 } else if (trail != null && trail.getIntensity() == 1) {
                     trail.setIntensity(null);
                 }
@@ -86,7 +92,7 @@ public class Board {
         }
     }
 
-    public void transformCellToTrail(int row, int col, LiveCell liveCell){
+    public void transformCellToTrail(int row, int col, LiveCell liveCell) {
         // todo   adott [row] [col] -on a  setből kiszedni az adott liveCell-t
 
         // todo helyére spawnolni egy trailt és átadni a directiont
