@@ -44,6 +44,7 @@ public class Main extends Application {
         stage.show();
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.025), e -> {
+            board.fadeTheTrails();
             board.moveTileContent();
             render();
         }));

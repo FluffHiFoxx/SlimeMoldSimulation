@@ -3,6 +3,7 @@ package com.slimemold.board;
 import com.slimemold.board.cell.Cell;
 import com.slimemold.board.cell.LiveCell;
 import com.slimemold.board.cell.Trail;
+import javafx.scene.paint.Color;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -39,7 +40,7 @@ public class Board {
                 System.out.println("coordinate difference: " + Arrays.toString(difference));
                 System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
                 board[row + difference[0]][col + difference[1]] = liveCell;
-                board[row][col] = null;
+                board[row][col] = new Trail(liveCell.getDirection(), Color.WHITE);
                 alreadyMovedLiveCells.add(liveCell);
             } catch (ArrayIndexOutOfBoundsException e) {
                 if ((col <= 0 || col >= colMax - 1) && (row <= 0 || row >= rowMax - 1)) {
@@ -55,7 +56,7 @@ public class Board {
                 System.out.println("coordinate difference: " + Arrays.toString(difference));
                 System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
                 board[row + difference[0]][col + difference[1]] = liveCell;
-                board[row][col] = null;
+                board[row][col] = new Trail(liveCell.getDirection(), Color.WHITE);
                 alreadyMovedLiveCells.add(liveCell);
             }
         }
@@ -82,21 +83,18 @@ public class Board {
         final int colMax = board[0].length;
         for (int row = 0; row < rowMax; row++) {
             for (int col = 0; col < colMax; col++) {
-                Trail trail = (Trail) board[row][col];
-                if (trail != null && trail.getIntensity() > 1) {
-                    trail.setIntensity(trail.getIntensity() - 1);
-                } else if (trail != null && trail.getIntensity() == 1) {
-                    trail.setIntensity(null);
+
+                Cell cell = board[row][col];
+                if (cell instanceof Trail) {
+                    Trail trail = (Trail) cell;
+                    if (trail.getIntensity() > 1) {
+                        trail.decreaseIntensity();
+                    } else if (trail.getIntensity() == 0) {
+                        board[row][col] = null;
+                    }
                 }
+
             }
         }
-    }
-
-    public void transformCellToTrail(int row, int col, LiveCell liveCell) {
-        // todo   adott [row] [col] -on a  setből kiszedni az adott liveCell-t
-
-        // todo helyére spawnolni egy trailt és átadni a directiont
-
-
     }
 }

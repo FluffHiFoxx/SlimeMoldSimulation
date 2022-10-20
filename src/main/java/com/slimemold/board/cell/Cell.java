@@ -10,7 +10,7 @@ public abstract class Cell {
     private static final int[] VECTOR_DIRECTIONS = {-2, -1, 0, 1, 2};
     private static final Random RANDOM = new Random();
     protected int[] direction;
-    protected final Color color;
+    protected Color color;
 
     public Cell(Color color) {
         this.direction = getRandomDirection();
