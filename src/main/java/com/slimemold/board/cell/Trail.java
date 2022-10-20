@@ -8,12 +8,12 @@ public class Trail extends Cell {
 
     public Trail(Color color) {
         super(color);
-        this.intensity = 10;
+        this.intensity = 50;
     }
 
     public Trail(int[] direction, Color color) {
         super(direction, color);
-        this.intensity = 10;
+        this.intensity = 50;
     }
 
     public Integer getIntensity() {
