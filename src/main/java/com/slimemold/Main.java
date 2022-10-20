@@ -1,7 +1,8 @@
 package com.slimemold;
 
 import com.slimemold.board.Board;
-import com.slimemold.board.Cell;
+import com.slimemold.board.LiveCell;
+import com.slimemold.board.Trail;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class Main extends Application {
@@ -40,14 +42,19 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.show();
-        putCellsOnBoard(15);
+        putCellsOnBoard(10);
         render();
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.025), e -> {
-            board.moveCells();
+            handleContent();
             render();
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.playFromStart();
+    }
+
+    private void handleContent() {
+        board.moveCells();
+//        board.fadeTrails();
     }
 
     private void putCellsOnBoard(int amount) {
@@ -56,19 +63,19 @@ public class Main extends Application {
             switch (rand.nextInt(4)) {
                 case 0 -> {
                     int x = 320 + i < boardWidth ? 320 + i : 320 - i;
-                    board.addCell(new Cell(Color.WHITE, x, 160));
+                    board.addCell(new LiveCell(Color.WHITE, x, 160));
                 }
                 case 2 -> {
                     int x = 320 - i < boardWidth ? 320 - i : 320 + i;
-                    board.addCell(new Cell(Color.WHITE, x, 160));
+                    board.addCell(new LiveCell(Color.WHITE, x, 160));
                 }
                 case 1 -> {
                     int y = 160 + i < boardHeight ? 160 + i : 160 - i;
-                    board.addCell(new Cell(Color.WHITE, 320, y));
+                    board.addCell(new LiveCell(Color.WHITE, 320, y));
                 }
                 case 3 -> {
                     int y = 160 - i < boardHeight ? 160 - i : 160 + i;
-                    board.addCell(new Cell(Color.WHITE, 320, y));
+                    board.addCell(new LiveCell(Color.WHITE, 320, y));
                 }
             }
         }
@@ -82,12 +89,11 @@ public class Main extends Application {
 
         for (int y = 0; y < boardHeight; y++) {
             for (int x = 0; x < boardWidth; x++) {
-                Cell cell = board.getCell(x, y);
-                if (cell == null) {
+                LiveCell liveCell = board.getCell(x, y);
+                Trail trail = board.getTrail(x, y);
+                if (trail == null && liveCell == null) {
                     pixelWriter.setColor(x, y, (Color) this.graphics.getFill());
-                } else {
-                    pixelWriter.setColor(x, y, cell.getColor());
-                }
+                } else pixelWriter.setColor(x, y, Objects.requireNonNullElse(liveCell, trail).getColor());
             }
         }
     }
