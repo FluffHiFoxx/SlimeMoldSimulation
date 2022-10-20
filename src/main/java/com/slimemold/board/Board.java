@@ -40,7 +40,7 @@ public class Board {
                 System.out.println("coordinate difference: " + Arrays.toString(difference));
                 System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
                 board[row + difference[0]][col + difference[1]] = liveCell;
-                board[row][col] = new Trail(liveCell.getDirection(), Color.AQUA);
+                board[row][col] = new Trail(liveCell.getDirection(), Color.WHITE);
                 alreadyMovedLiveCells.add(liveCell);
             } catch (ArrayIndexOutOfBoundsException e) {
                 if ((col <= 0 || col >= colMax - 1) && (row <= 0 || row >= rowMax - 1)) {
@@ -56,7 +56,7 @@ public class Board {
                 System.out.println("coordinate difference: " + Arrays.toString(difference));
                 System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
                 board[row + difference[0]][col + difference[1]] = liveCell;
-                board[row][col] = new Trail(liveCell.getDirection(), Color.AQUA);
+                board[row][col] = new Trail(liveCell.getDirection(), Color.WHITE);
                 alreadyMovedLiveCells.add(liveCell);
             }
         }
@@ -84,11 +84,11 @@ public class Board {
         for (int row = 0; row < rowMax; row++) {
             for (int col = 0; col < colMax; col++) {
 
-                Cell cell =  board[row][col];
-                if(cell instanceof Trail){
+                Cell cell = board[row][col];
+                if (cell instanceof Trail) {
                     Trail trail = (Trail) cell;
                     if (trail.getIntensity() > 1) {
-                        trail.setIntensity(trail.getIntensity() - 1);
+                        trail.decreaseIntensity();
                     } else if (trail.getIntensity() == 1) {
                         board[row][col] = null;
                     }

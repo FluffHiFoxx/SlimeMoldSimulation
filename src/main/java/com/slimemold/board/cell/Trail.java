@@ -20,7 +20,11 @@ public class Trail extends Cell {
         return intensity;
     }
 
-    public void setIntensity(Integer intensity) {
-        this.intensity = intensity;
+    public void decreaseIntensity() {
+        this.intensity--;
+        int red = this.color.getRed() + 1 < 255 ? (int) this.color.getRed() + 1 : (int) this.color.getRed();
+        int green = this.color.getGreen() + 1 < 255 ? (int) this.color.getGreen() + 1 : (int) this.color.getGreen();
+        int blue = this.color.getBlue() + 1 < 255 ? (int) this.color.getBlue() + 1 : (int) this.color.getBlue();
+        this.color = Color.rgb(red, green, blue);
     }
 }
