@@ -1,6 +1,8 @@
 package com.slimemold;
+
 import com.slimemold.board.Board;
-import com.slimemold.board.Cell;
+import com.slimemold.board.cell.Cell;
+import com.slimemold.board.cell.LiveCell;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -37,15 +39,12 @@ public class Main extends Application {
         this.window.setCenter(this.canvas);
 
         stage.setScene(scene);
-        board.setCell(159, 320, new Cell(new int[]{-1,1},Color.WHITE));
-        board.setCell(160, 320, new Cell(new int[]{1,1},Color.WHITE));
-        board.setCell(159, 319, new Cell(new int[]{-1,-1},Color.WHITE));
-        board.setCell(160, 319, new Cell(new int[]{1,-1},Color.WHITE));
+        board.setCell(160, 320, new LiveCell(Color.WHITE));
         render();
         stage.show();
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.025), e -> {
-            board.moveCells();
+            board.moveTileContent();
             render();
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -61,10 +60,10 @@ public class Main extends Application {
         for (int col = 0; col < boardWidth; col++) {
             for (int row = 0; row < boardHeight; row++) {
                 Cell cell = board.getCell(row, col);
-                if (cell == null) {
-                    pixelWriter.setColor(col, row, (Color) this.graphics.getFill());
-                } else {
+                if (cell != null) {
                     pixelWriter.setColor(col, row, cell.getColor());
+                } else {
+                    pixelWriter.setColor(col, row, (Color) this.graphics.getFill());
                 }
             }
         }
