@@ -37,24 +37,52 @@ public class Main extends Application {
 
         Scene scene = new Scene(this.window);
         this.window.setCenter(this.canvas);
-
         stage.setScene(scene);
-        board.setCell(160, 320, new LiveCell(Color.WHITE));
-        board.setCell(161, 320, new LiveCell(Color.WHITE));
-        board.setCell(162, 320, new LiveCell(Color.WHITE));
-        board.setCell(163, 320, new LiveCell(Color.WHITE));
-        board.setCell(164, 320, new LiveCell(Color.WHITE));
-        board.setCell(165, 320, new LiveCell(Color.WHITE));
+        createCells();
         render();
+        scene.setOnKeyPressed(e -> {
+            for (int i = 0; i < 2; i++) {
+                board.moveContent();
+                render();
+            }
+        });
         stage.show();
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.025), e -> {
-            board.fadeTheTrails();
-            board.moveTileContent();
-            render();
-        }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.playFromStart();
+//        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+////            board.moveContent();
+////            render();
+//        }));
+//        timeline.setCycleCount(1);
+//        timeline.playFromStart();
+    }
+
+    private void createCells() {
+        board.setCell(160, 320, new LiveCell(Color.RED));
+        board.setCell(161, 320, new LiveCell(Color.VIOLET));
+        board.setCell(162, 320, new LiveCell(Color.WHITE));
+        board.setCell(163, 320, new LiveCell(Color.GOLD));
+        board.setCell(164, 320, new LiveCell(Color.GREEN));
+        board.setCell(165, 320, new LiveCell(Color.CRIMSON));
+        board.setCell(166, 320, new LiveCell(Color.AQUA));
+        board.setCell(167, 320, new LiveCell(Color.CYAN));
+        board.setCell(168, 320, new LiveCell(Color.PURPLE));
+        board.setCell(169, 320, new LiveCell(Color.PEACHPUFF));
+        board.setCell(170, 320, new LiveCell(Color.WHITE));
+        board.setCell(160, 321, new LiveCell(Color.WHITE));
+        board.setCell(160, 322, new LiveCell(Color.BLUE));
+        board.setCell(160, 323, new LiveCell(Color.WHITE));
+        board.setCell(160, 324, new LiveCell(Color.WHITE));
+        board.setCell(160, 325, new LiveCell(Color.WHITE));
+        board.setCell(160, 326, new LiveCell(Color.WHITE));
+        board.setCell(160, 327, new LiveCell(Color.WHITE));
+        board.setCell(160, 328, new LiveCell(Color.WHITE));
+        board.setCell(160, 329, new LiveCell(Color.WHITE));
+        board.setCell(160, 330, new LiveCell(Color.WHITE));
+        board.setCell(160, 331, new LiveCell(Color.WHITE));
+        board.setCell(160, 332, new LiveCell(Color.WHITE));
+        board.setCell(160, 333, new LiveCell(Color.WHITE));
+        board.setCell(160, 334, new LiveCell(Color.WHITE));
+        board.setCell(160, 335, new LiveCell(Color.WHITE));
     }
 
     private void render() {

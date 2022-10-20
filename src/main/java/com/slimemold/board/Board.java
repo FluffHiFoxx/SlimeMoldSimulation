@@ -12,63 +12,57 @@ import java.util.Set;
 public class Board {
 
     private Cell[][] board;
-    private Set<LiveCell> alreadyMovedLiveCells;
+//    private Set<LiveCell> alreadyMovedLiveCells;
 
     public Board(int width, int height) {
         this.board = new Cell[height][width];
+//        this.alreadyMovedLiveCells = new HashSet<>();
     }
 
-    public void moveTileContent() {
-        this.alreadyMovedLiveCells = new HashSet<>();
+    public void moveContent() {
+        System.out.println("call moveContent");
+        Set<LiveCell> alreadyMovedLiveCells = new HashSet<>();
         final int rowMax = board.length;
         final int colMax = board[0].length;
+//        fadeTheTrails();
+        int counter = 0;
         for (int row = 0; row < rowMax; row++) {
             for (int col = 0; col < colMax; col++) {
                 Cell cell = board[row][col];
-                if (cell instanceof LiveCell) {
-                    moveCells(rowMax, colMax, row, col, (LiveCell) cell);
+                if (cell instanceof LiveCell && !alreadyMovedLiveCells.contains((LiveCell) cell)) {
+                    System.out.println("cell number " + counter);
+                    moveCell(rowMax, colMax, row, col, (LiveCell) cell);
+                    alreadyMovedLiveCells.add((LiveCell) cell);
+                    counter++;
                 }
             }
         }
     }
 
-    private void moveCells(int rowMax, int colMax, int row, int col, LiveCell liveCell) {
-        if (!alreadyMovedLiveCells.contains(liveCell)) {
-            try {
-                int[] difference = liveCell.moveToMake();
-                System.out.println("\nCell: " + liveCell);
-                System.out.println("coordinate difference: " + Arrays.toString(difference));
-                System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
-                if (board[row + difference[0]][col + difference[1]] instanceof LiveCell) {
-                    board[row + (difference[0] * 2)][col + (difference[1] * 2)] = liveCell;
-                } else {
-                    board[row + difference[0]][col + difference[1]] = liveCell;
-                }
-                board[row][col] = new Trail(liveCell.getDirection(), Color.WHITE);
-                alreadyMovedLiveCells.add(liveCell);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                if ((col <= 0 || col >= colMax - 1) && (row <= 0 || row >= rowMax - 1)) {
-                    liveCell.reverseDirection(0);
-                    liveCell.reverseDirection(1);
-                } else if (col <= 0 || col >= colMax - 1) {
-                    liveCell.reverseDirection(1);
-                } else if (row <= 0 || row >= rowMax - 1) {
-                    liveCell.reverseDirection(0);
-                }
-                int[] difference = liveCell.moveToMake();
-                System.out.println("\nCell: " + liveCell);
-                System.out.println("coordinate difference: " + Arrays.toString(difference));
-                System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
-                if (board[row + difference[0]][col + difference[1]] instanceof LiveCell) {
-                    board[row + (difference[0] * 2)][col + (difference[1] * 2)] = liveCell;
-                } else {
-                    board[row + difference[0]][col + difference[1]] = liveCell;
-                }
-                board[row][col] = new Trail(liveCell.getDirection(), Color.WHITE);
-                alreadyMovedLiveCells.add(liveCell);
-            }
+    private void moveCell(int rowMax, int colMax, int row, int col, LiveCell liveCell) {
+        int[] difference = liveCell.moveToMake();
+        if ((col + difference[1] < 0 || col + difference[1] > colMax - 1) &&
+                (row + difference[0] < 0 || row + difference[0] > rowMax - 1)) {
+            liveCell.reverseDirection(0);
+            liveCell.reverseDirection(1);
+            difference = liveCell.moveToMake();
+        } else if (col + difference[1] < 0 || col + difference[1] > colMax - 1) {
+            liveCell.reverseDirection(1);
+            difference = liveCell.moveToMake();
+        } else if (row + difference[0] < 0 || row + difference[0] > rowMax - 1) {
+            liveCell.reverseDirection(0);
+            difference = liveCell.moveToMake();
         }
+//        System.out.println("\nCell: " + liveCell);
+//        System.out.println("coordinate difference: " + Arrays.toString(difference));
+//        System.out.println("current coordinate: [" + row + ", " + col + "]");
+//        System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
+//        if (!(board[row + difference[0]][col + difference[1]] instanceof LiveCell)) {
+            board[row + difference[0]][col + difference[1]] = liveCell;
+//        }
+//        board[row][col] = new Trail(liveCell.getDirection(), liveCell.getColor());
     }
+
 
     public Cell[][] getBoard() {
         return board;
@@ -86,7 +80,7 @@ public class Board {
         board[row][col] = cell;
     }
 
-    public void fadeTheTrails() {
+    private void fadeTheTrails() {
         final int rowMax = board.length;
         final int colMax = board[0].length;
         for (int row = 0; row < rowMax; row++) {
