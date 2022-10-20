@@ -1,45 +1,20 @@
-package com.slimemold.board;
+package com.slimemold.board.cell;
 
 import javafx.scene.paint.Color;
 
 import java.util.Arrays;
-import java.util.Random;
 
-public class Cell {
-
-    private int[] direction;
-    private static final int[] VECTOR_DIRECTIONS = {-2, -1, 0, 1, 2};
-    private static final Random RANDOM = new Random();
+public class LiveCell extends Cell {
     private int[] movesLeft;
-    private final Color color;
 
-    public Cell(Color color) {
-        this.direction = getRandomDirection();
-        this.color = color;
+    public LiveCell(Color color) {
+        super(color);
         this.movesLeft = direction;
     }
 
-    public Cell(int[] direction, Color color) {
-        if (Arrays.equals(direction, new int[]{0, 0})) {
-            direction = getRandomDirection();
-        }
-        if (Math.abs(direction[0]) > 2) {
-            direction[0] = 2 * (Math.abs(direction[0]) / direction[0]);
-        }
-        if (Math.abs(direction[1]) > 2) {
-            direction[1] = 2 * (Math.abs(direction[0]) / direction[1]);
-        }
-        this.direction = direction;
-        this.color = color;
+    public LiveCell(int[] direction, Color color) {
+        super(direction, color);
         this.movesLeft = direction;
-    }
-
-    private static int[] getRandomDirection() {
-        int[] direction = {0, 0};
-        while (Arrays.equals(direction, new int[]{0, 0})) {
-            direction = new int[]{VECTOR_DIRECTIONS[RANDOM.nextInt(5)], VECTOR_DIRECTIONS[RANDOM.nextInt(5)]};
-        }
-        return direction;
     }
 
     public int[] moveToMake() {

@@ -1,5 +1,8 @@
 package com.slimemold.board;
 
+import com.slimemold.board.cell.Cell;
+import com.slimemold.board.cell.LiveCell;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,41 +12,41 @@ public class Board {
     private Cell[][] board;
 
     public Board(int width, int height) {
-        this.board = new Cell[height][width];
+        this.board = new LiveCell[height][width];
     }
 
     public void moveCells() {
-        Set<Cell> alreadyMovedCells = new HashSet<>();
+        Set<LiveCell> alreadyMovedLiveCells = new HashSet<>();
         final int rowMax = board.length;
         final int colMax = board[0].length;
         for (int row = 0; row < rowMax; row++) {
             for (int col = 0; col < colMax; col++) {
-                Cell cell = getCell(row, col);
-                if (board[row][col] != null && !alreadyMovedCells.contains(cell)) {
+                LiveCell liveCell = (LiveCell) getCell(row, col);
+                if (board[row][col] != null && !alreadyMovedLiveCells.contains(liveCell)) {
                     try {
-                        int[] difference = cell.moveToMake();
-                        System.out.println("\nCell: " + cell);
+                        int[] difference = liveCell.moveToMake();
+                        System.out.println("\nCell: " + liveCell);
                         System.out.println("coordinate difference: " + Arrays.toString(difference));
                         System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
-                        setCell(row + difference[0], col + difference[1], cell);
+                        setCell(row + difference[0], col + difference[1], liveCell);
                         setCell(row, col, null);
-                        alreadyMovedCells.add(cell);
+                        alreadyMovedLiveCells.add(liveCell);
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        if ((col == 0 || col >= colMax - 1) && (row == 0 || row >= rowMax - 1)) {
-                            cell.reverseDirection(0);
-                            cell.reverseDirection(1);
-                        } else if (col == 0 || col >= colMax - 1) {
-                            cell.reverseDirection(1);
-                        } else if (row == 0 || row >= rowMax - 1) {
-                            cell.reverseDirection(0);
+                        if ((col <= 0 || col >= colMax - 1) && (row <= 0 || row >= rowMax - 1)) {
+                            liveCell.reverseDirection(0);
+                            liveCell.reverseDirection(1);
+                        } else if (col <= 0 || col >= colMax - 1) {
+                            liveCell.reverseDirection(1);
+                        } else if (row <= 0 || row >= rowMax - 1) {
+                            liveCell.reverseDirection(0);
                         }
-                        int[] difference = cell.moveToMake();
-                        System.out.println("\nCell: " + cell);
+                        int[] difference = liveCell.moveToMake();
+                        System.out.println("\nCell: " + liveCell);
                         System.out.println("coordinate difference: " + Arrays.toString(difference));
                         System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
-                        setCell(row + difference[0], col + difference[1], cell);
+                        setCell(row + difference[0], col + difference[1], liveCell);
                         setCell(row, col, null);
-                        alreadyMovedCells.add(cell);
+                        alreadyMovedLiveCells.add(liveCell);
                     }
 
                 }
@@ -55,7 +58,7 @@ public class Board {
         return board;
     }
 
-    public void setBoard(Cell[][] board) {
+    public void setBoard(LiveCell[][] board) {
         this.board = board;
     }
 
@@ -63,7 +66,7 @@ public class Board {
         return board[row][col];
     }
 
-    public void setCell(int row, int col, Cell cell) {
-        board[row][col] = cell;
+    public void setCell(int row, int col, LiveCell liveCell) {
+        board[row][col] = liveCell;
     }
 }
