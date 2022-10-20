@@ -8,18 +8,22 @@ import java.util.Random;
 public class Cell {
 
     private int[] direction;
+    private int yCoordinate;
+    private int xCoordinate;
     private static final int[] VECTOR_DIRECTIONS = {-2, -1, 0, 1, 2};
     private static final Random RANDOM = new Random();
     private int[] movesLeft;
     private final Color color;
 
-    public Cell(Color color) {
+    public Cell(Color color, int x, int y) {
         this.direction = getRandomDirection();
         this.color = color;
         this.movesLeft = direction;
+        this.xCoordinate = x;
+        this.yCoordinate = y;
     }
 
-    public Cell(int[] direction, Color color) {
+    public Cell(int[] direction, Color color, int x, int y) {
         if (Arrays.equals(direction, new int[]{0, 0})) {
             direction = getRandomDirection();
         }
@@ -32,6 +36,24 @@ public class Cell {
         this.direction = direction;
         this.color = color;
         this.movesLeft = direction;
+        this.xCoordinate = x;
+        this.yCoordinate = y;
+    }
+
+    public void move(Board board) {
+        int[] difference = moveToMake();
+        int nextX = xCoordinate + difference[0];
+        int nextY = yCoordinate + difference[1];
+        if (nextX > 0 && nextX < board.getWidth()) {
+            xCoordinate = nextX;
+        } else {
+            xCoordinate += bounceOff(0);
+        }
+        if (nextY > 0 && nextY < board.getHeight()) {
+            yCoordinate += difference[1];
+        } else {
+            yCoordinate += bounceOff(1);
+        }
     }
 
     private static int[] getRandomDirection() {
@@ -42,7 +64,7 @@ public class Cell {
         return direction;
     }
 
-    public int[] moveToMake() {
+    private int[] moveToMake() {
         if (Arrays.equals(movesLeft, new int[]{0, 0})) {
             movesLeft = direction;
         }
@@ -64,19 +86,24 @@ public class Cell {
         return firstMove;
     }
 
-    public int[] getDirection() {
-        return direction;
-    }
-
-    public void setDirection(int[] direction) {
-        this.direction = direction;
-    }
-
     public Color getColor() {
         return color;
     }
 
-    public void reverseDirection(int i) {
+    public int bounceOff(int i) {
         direction[i] = -direction[i];
+        return moveToMake()[i];
+    }
+
+    public void changeDirection(int[] direction) {
+        this.direction = direction;
+    }
+
+    public int getyCoordinate() {
+        return yCoordinate;
+    }
+
+    public int getxCoordinate() {
+        return xCoordinate;
     }
 }

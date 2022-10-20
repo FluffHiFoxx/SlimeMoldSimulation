@@ -1,4 +1,5 @@
 package com.slimemold;
+
 import com.slimemold.board.Board;
 import com.slimemold.board.Cell;
 import javafx.animation.Animation;
@@ -14,11 +15,12 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.Random;
+
 public class Main extends Application {
     BorderPane window;
     Canvas canvas;
     GraphicsContext graphics;
-
     int boardWidth = 640;
     int boardHeight = 320;
     Board board = new Board(boardWidth, boardHeight);
@@ -37,13 +39,9 @@ public class Main extends Application {
         this.window.setCenter(this.canvas);
 
         stage.setScene(scene);
-        board.setCell(159, 320, new Cell(new int[]{-1,1},Color.WHITE));
-        board.setCell(160, 320, new Cell(new int[]{1,1},Color.WHITE));
-        board.setCell(159, 319, new Cell(new int[]{-1,-1},Color.WHITE));
-        board.setCell(160, 319, new Cell(new int[]{1,-1},Color.WHITE));
-        render();
         stage.show();
-
+        putCellsOnBoard(15);
+        render();
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.025), e -> {
             board.moveCells();
             render();
@@ -52,19 +50,43 @@ public class Main extends Application {
         timeline.playFromStart();
     }
 
+    private void putCellsOnBoard(int amount) {
+        Random rand = new Random();
+        for (int i = 0; i < amount; i++) {
+            switch (rand.nextInt(4)) {
+                case 0 -> {
+                    int x = 320 + i < boardWidth ? 320 + i : 320 - i;
+                    board.addCell(new Cell(Color.WHITE, x, 160));
+                }
+                case 2 -> {
+                    int x = 320 - i < boardWidth ? 320 - i : 320 + i;
+                    board.addCell(new Cell(Color.WHITE, x, 160));
+                }
+                case 1 -> {
+                    int y = 160 + i < boardHeight ? 160 + i : 160 - i;
+                    board.addCell(new Cell(Color.WHITE, 320, y));
+                }
+                case 3 -> {
+                    int y = 160 - i < boardHeight ? 160 - i : 160 + i;
+                    board.addCell(new Cell(Color.WHITE, 320, y));
+                }
+            }
+        }
+    }
+
     private void render() {
         this.graphics.setFill(Color.BLACK);
         this.graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         PixelWriter pixelWriter = canvas.getGraphicsContext2D().getPixelWriter();
 
-        for (int col = 0; col < boardWidth; col++) {
-            for (int row = 0; row < boardHeight; row++) {
-                Cell cell = board.getCell(row, col);
+        for (int y = 0; y < boardHeight; y++) {
+            for (int x = 0; x < boardWidth; x++) {
+                Cell cell = board.getCell(x, y);
                 if (cell == null) {
-                    pixelWriter.setColor(col, row, (Color) this.graphics.getFill());
+                    pixelWriter.setColor(x, y, (Color) this.graphics.getFill());
                 } else {
-                    pixelWriter.setColor(col, row, cell.getColor());
+                    pixelWriter.setColor(x, y, cell.getColor());
                 }
             }
         }
