@@ -39,7 +39,11 @@ public class Board {
                 System.out.println("\nCell: " + liveCell);
                 System.out.println("coordinate difference: " + Arrays.toString(difference));
                 System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
-                board[row + difference[0]][col + difference[1]] = liveCell;
+                if (board[row + difference[0]][col + difference[1]] instanceof LiveCell) {
+                    board[row + (difference[0] * 2)][col + (difference[1] * 2)] = liveCell;
+                } else {
+                    board[row + difference[0]][col + difference[1]] = liveCell;
+                }
                 board[row][col] = new Trail(liveCell.getDirection(), Color.WHITE);
                 alreadyMovedLiveCells.add(liveCell);
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -55,7 +59,11 @@ public class Board {
                 System.out.println("\nCell: " + liveCell);
                 System.out.println("coordinate difference: " + Arrays.toString(difference));
                 System.out.println("next coordinate: [" + (row + difference[0]) + ", " + (col + difference[1]) + "]");
-                board[row + difference[0]][col + difference[1]] = liveCell;
+                if (board[row + difference[0]][col + difference[1]] instanceof LiveCell) {
+                    board[row + (difference[0] * 2)][col + (difference[1] * 2)] = liveCell;
+                } else {
+                    board[row + difference[0]][col + difference[1]] = liveCell;
+                }
                 board[row][col] = new Trail(liveCell.getDirection(), Color.WHITE);
                 alreadyMovedLiveCells.add(liveCell);
             }

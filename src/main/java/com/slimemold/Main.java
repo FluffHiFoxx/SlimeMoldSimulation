@@ -40,6 +40,11 @@ public class Main extends Application {
 
         stage.setScene(scene);
         board.setCell(160, 320, new LiveCell(Color.WHITE));
+        board.setCell(161, 320, new LiveCell(Color.WHITE));
+        board.setCell(162, 320, new LiveCell(Color.WHITE));
+        board.setCell(163, 320, new LiveCell(Color.WHITE));
+        board.setCell(164, 320, new LiveCell(Color.WHITE));
+        board.setCell(165, 320, new LiveCell(Color.WHITE));
         render();
         stage.show();
 
