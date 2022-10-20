@@ -89,7 +89,7 @@ public class Board {
                     Trail trail = (Trail) cell;
                     if (trail.getIntensity() > 1) {
                         trail.decreaseIntensity();
-                    } else if (trail.getIntensity() == 1) {
+                    } else if (trail.getIntensity() == 0) {
                         board[row][col] = null;
                     }
                 }
