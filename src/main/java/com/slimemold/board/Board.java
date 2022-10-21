@@ -1,7 +1,5 @@
 package com.slimemold.board;
 
-import javafx.scene.paint.Color;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,7 +7,6 @@ public class Board {
     private final Set<LiveCell> liveCells;
     private final Set<Trail> trails;
     private final Cell[][] board;
-//    private final Color[][] board;
     private final int width;
     private final int height;
 
@@ -19,17 +16,14 @@ public class Board {
         this.width = width;
         this.height = height;
         this.board = new Cell[height][width];
-//        this.board = new Cell[height][width];
     }
 
     public void fillBoard() {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-//                this.board[y][x] = getLiveCell(x, y) != null ? getLiveCell(x, y).getColor() :
-//                        (getTrail(x, y) != null ? getLiveCell(x, y).getColor() : Color.BLACK);
-                this.board[y][x] = getLiveCell(x, y) != null ? getLiveCell(x, y) :
-                        (getTrail(x, y) != null ? getLiveCell(x, y) : null);
-            }
+        for (LiveCell liveCell : liveCells) {
+            board[liveCell.getyCoordinate()][liveCell.getxCoordinate()] = liveCell;
+        }
+        for (Trail trail : trails) {
+            board[trail.getyCoordinate()][trail.getxCoordinate()] = trail;
         }
     }
 
@@ -40,15 +34,10 @@ public class Board {
     }
 
     public void fadeTrails() {
-        Set<Trail> toRemove = new HashSet<>();
+        Set<Trail> trails = Set.copyOf(this.trails);
         for (Trail trail : trails) {
-            if (trail.getIntensity() > 0) {
-                trail.decrease();
-            } else {
-                toRemove.add(trail);
-            }
+            trail.decrease(this);
         }
-        trails.removeAll(toRemove);
     }
 
     public LiveCell getLiveCell(int x, int y) {
@@ -71,6 +60,10 @@ public class Board {
         trails.add(trail);
     }
 
+    public void removeTrail(Trail trail) {
+        trails.remove(trail);
+    }
+
     public int getWidth() {
         return width;
     }
@@ -81,5 +74,13 @@ public class Board {
 
     public Cell[][] getBoard() {
         return board;
+    }
+
+    public Cell getCell(int y, int x) {
+        return board[y][x];
+    }
+
+    public void setCell(int y, int x, Cell cell) {
+        board[y][x] = cell;
     }
 }

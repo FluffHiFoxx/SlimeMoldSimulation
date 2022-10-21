@@ -17,7 +17,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.Objects;
 import java.util.Random;
 
 public class Main extends Application {
@@ -43,7 +42,7 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.show();
-        putCellsOnBoard(15);
+        putCellsOnBoard(100);
         render();
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
             handleContent();
@@ -55,29 +54,32 @@ public class Main extends Application {
 
     private void handleContent() {
         board.moveCells();
-//        board.fadeTrails();
+        board.fadeTrails();
         board.fillBoard();
     }
 
     private void putCellsOnBoard(int amount) {
         Random rand = new Random();
+        int halfWidth = boardWidth / 2;
+        int halfHeight = boardHeight / 2;
+
         for (int i = 0; i < amount; i++) {
             switch (rand.nextInt(4)) {
                 case 0 -> {
-                    int x = 320 + i < boardWidth ? 320 + i : 320 - i;
-                    board.addCell(new LiveCell(Color.WHITE, x, 160));
+                    int x = halfWidth + i < boardWidth && halfWidth + i > 0 ? halfWidth + i : halfWidth - i;
+                    board.addCell(new LiveCell(Color.WHITE, x, halfHeight));
                 }
                 case 2 -> {
-                    int x = 320 - i > 0 ? 320 - i : 320 + i;
-                    board.addCell(new LiveCell(Color.WHITE, x, 160));
+                    int x = halfWidth - i > 0 && halfWidth - i < boardWidth ? halfWidth - i : halfWidth + i;
+                    board.addCell(new LiveCell(Color.WHITE, x, halfHeight));
                 }
                 case 1 -> {
-                    int y = 160 + i < boardHeight ? 160 + i : 160 - i;
-                    board.addCell(new LiveCell(Color.WHITE, 320, y));
+                    int y = halfHeight + i < boardHeight && halfHeight + i > 0 ? halfHeight + i : halfHeight - i;
+                    board.addCell(new LiveCell(Color.WHITE, halfWidth, y));
                 }
                 case 3 -> {
-                    int y = 160 - i > 0 ? 160 - i : 160 + i;
-                    board.addCell(new LiveCell(Color.WHITE, 320, y));
+                    int y = halfHeight - i > 0 && halfHeight - i < boardHeight? halfHeight - i : halfHeight + i;
+                    board.addCell(new LiveCell(Color.WHITE, halfWidth, y));
                 }
             }
         }
@@ -90,7 +92,7 @@ public class Main extends Application {
         PixelWriter pixelWriter = canvas.getGraphicsContext2D().getPixelWriter();
         for (int y = 0; y < boardHeight; y++) {
             for (int x = 0; x < boardWidth; x++) {
-                Cell cell = board.getBoard()[y][x];
+                Cell cell = board.getCell(y, x);
                 pixelWriter.setColor(x, y, cell instanceof LiveCell liveCell ? liveCell.getColor() :
                         (cell instanceof Trail trail ? trail.getColor() : (Color) graphics.getFill()));
             }

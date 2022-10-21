@@ -29,19 +29,27 @@ public class LiveCell extends Cell {
 
     public void move(Board board) {
         int[] difference = moveToMake();
-        int nextX = getxCoordinate() + difference[0];
-        int nextY = getyCoordinate() + difference[1];
-        board.addTrail(new Trail(getColor(), getxCoordinate(), getyCoordinate()));
-        if (nextX > 0 && nextX < board.getWidth()) {
+        int originalX = xCoordinate;
+        int originalY = yCoordinate;
+        int nextX = xCoordinate + difference[0];
+        int nextY = yCoordinate + difference[1];
+        int maxX = board.getWidth() - 1;
+        int maxY = board.getHeight() - 1;
+        if (nextX >= 1 && nextX < maxX) {
             setxCoordinate(nextX);
         } else {
-            setxCoordinate(getxCoordinate() + bounceOff(0));
+            setxCoordinate(xCoordinate + bounceOff(0));
         }
-        if (nextY > 0 && nextY < board.getHeight()) {
+        if (nextY >= 1 && nextY < maxY) {
             setyCoordinate(nextY);
+//        } else if (board.getBoard()) {
+
         } else {
-            setyCoordinate(getyCoordinate() + bounceOff(1));
+            setyCoordinate(yCoordinate + bounceOff(1));
         }
+        Trail trail = new Trail(getColor(), originalX, originalY);
+        board.setCell(originalY, originalX, trail);
+        board.addTrail(trail);
     }
 
     private int[] moveToMake() {
@@ -73,18 +81,5 @@ public class LiveCell extends Cell {
 
     public void changeDirection(int[] direction) {
         this.direction = direction;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LiveCell liveCell = (LiveCell) o;
-        return Arrays.equals(movesLeft, liveCell.movesLeft);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(movesLeft);
     }
 }

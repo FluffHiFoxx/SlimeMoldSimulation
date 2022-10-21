@@ -2,8 +2,6 @@ package com.slimemold.board;
 
 import javafx.scene.paint.Color;
 
-import java.util.Objects;
-
 public class Trail extends Cell {
     private int intensity;
 
@@ -12,34 +10,27 @@ public class Trail extends Cell {
         intensity = 50;
     }
 
-    public void decrease() {
-        intensity--;
+    public void decrease(Board board) {
+        if (intensity > 0) {
+            intensity--;
+            int decrement = 5;
 
-        int red = (int) getColor().getRed() * 255;
-        int green = (int) getColor().getGreen() * 255;
-        int blue = (int) getColor().getBlue() * 255;
+            int red = (int) (getColor().getRed() * 255);
+            int green = (int) (getColor().getGreen() * 255);
+            int blue = (int) (getColor().getBlue() * 255);
 
-        red = red - 1 > 0 ? red - 1 : red;
-        green = green - 1 > 0 ? green - 1 : green;
-        blue = blue - 1 > 0 ? blue - 1 : blue;
+            red = red - decrement > 0 ? red - decrement : red;
+            green = green - decrement > 0 ? green - decrement : green;
+            blue = blue - decrement > 0 ? blue - decrement : blue;
 
-        setColor(Color.rgb(red, green, blue));
+            setColor(Color.rgb(red, green, blue));
+        } else {
+            board.removeTrail(this);
+            board.setCell(yCoordinate, xCoordinate, null);
+        }
     }
 
     public int getIntensity() {
         return intensity;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Trail trail = (Trail) o;
-        return intensity == trail.intensity;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(intensity);
     }
 }
