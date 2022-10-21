@@ -1,6 +1,7 @@
 package com.slimemold;
 
 import com.slimemold.board.Board;
+import com.slimemold.board.Cell;
 import com.slimemold.board.LiveCell;
 import com.slimemold.board.Trail;
 import javafx.animation.Animation;
@@ -42,9 +43,9 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.show();
-        putCellsOnBoard(10);
+        putCellsOnBoard(15);
         render();
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.025), e -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
             handleContent();
             render();
         }));
@@ -55,6 +56,7 @@ public class Main extends Application {
     private void handleContent() {
         board.moveCells();
 //        board.fadeTrails();
+        board.fillBoard();
     }
 
     private void putCellsOnBoard(int amount) {
@@ -66,7 +68,7 @@ public class Main extends Application {
                     board.addCell(new LiveCell(Color.WHITE, x, 160));
                 }
                 case 2 -> {
-                    int x = 320 - i < boardWidth ? 320 - i : 320 + i;
+                    int x = 320 - i > 0 ? 320 - i : 320 + i;
                     board.addCell(new LiveCell(Color.WHITE, x, 160));
                 }
                 case 1 -> {
@@ -74,7 +76,7 @@ public class Main extends Application {
                     board.addCell(new LiveCell(Color.WHITE, 320, y));
                 }
                 case 3 -> {
-                    int y = 160 - i < boardHeight ? 160 - i : 160 + i;
+                    int y = 160 - i > 0 ? 160 - i : 160 + i;
                     board.addCell(new LiveCell(Color.WHITE, 320, y));
                 }
             }
@@ -86,14 +88,11 @@ public class Main extends Application {
         this.graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         PixelWriter pixelWriter = canvas.getGraphicsContext2D().getPixelWriter();
-
         for (int y = 0; y < boardHeight; y++) {
             for (int x = 0; x < boardWidth; x++) {
-                LiveCell liveCell = board.getCell(x, y);
-                Trail trail = board.getTrail(x, y);
-                if (trail == null && liveCell == null) {
-                    pixelWriter.setColor(x, y, (Color) this.graphics.getFill());
-                } else pixelWriter.setColor(x, y, Objects.requireNonNullElse(liveCell, trail).getColor());
+                Cell cell = board.getBoard()[y][x];
+                pixelWriter.setColor(x, y, cell instanceof LiveCell liveCell ? liveCell.getColor() :
+                        (cell instanceof Trail trail ? trail.getColor() : (Color) graphics.getFill()));
             }
         }
     }

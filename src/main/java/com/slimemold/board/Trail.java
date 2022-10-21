@@ -19,11 +19,11 @@ public class Trail extends Cell {
         int green = (int) getColor().getGreen() * 255;
         int blue = (int) getColor().getBlue() * 255;
 
-        int newRed = Math.max(red - 1, 0);
-        int newGreen = Math.max(green - 1, 0);
-        int newBlue = Math.max(blue - 1, 0);
+        red = red - 1 > 0 ? red - 1 : red;
+        green = green - 1 > 0 ? green - 1 : green;
+        blue = blue - 1 > 0 ? blue - 1 : blue;
 
-        setColor(Color.rgb(newRed, newGreen, newBlue));
+        setColor(Color.rgb(red, green, blue));
     }
 
     public int getIntensity() {

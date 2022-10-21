@@ -31,7 +31,7 @@ public class LiveCell extends Cell {
         int[] difference = moveToMake();
         int nextX = getxCoordinate() + difference[0];
         int nextY = getyCoordinate() + difference[1];
-//        board.addTrail(new Trail(getColor(), getxCoordinate(), getyCoordinate()));
+        board.addTrail(new Trail(getColor(), getxCoordinate(), getyCoordinate()));
         if (nextX > 0 && nextX < board.getWidth()) {
             setxCoordinate(nextX);
         } else {
