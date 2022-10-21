@@ -51,18 +51,18 @@ public abstract class Cell {
         return color;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Cell cell = (Cell) o;
-        return Arrays.equals(direction, cell.direction) && Objects.equals(color, cell.color);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(color);
-        result = 31 * result + Arrays.hashCode(direction);
-        return result;
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Cell cell = (Cell) o;
+//        return Arrays.equals(direction, cell.direction) && Objects.equals(color, cell.color);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int result = Objects.hash(color);
+//        result = 31 * result + Arrays.hashCode(direction);
+//        return result;
+//    }
 }

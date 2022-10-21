@@ -3,13 +3,18 @@ package com.slimemold.board.cell;
 import javafx.scene.paint.Color;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class LiveCell extends Cell {
+    public int x;
+    public int y;
     private int[] movesLeft;
 
-    public LiveCell(Color color) {
+    public LiveCell(Color color,int x,int y) {
         super(color);
         this.movesLeft = direction;
+        this.x=x;
+        this.y=y;
     }
 
     public LiveCell(int[] direction, Color color) {
@@ -43,16 +48,32 @@ public class LiveCell extends Cell {
         direction[i] = -direction[i];
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        LiveCell liveCell = (LiveCell) o;
+//        return Arrays.equals(movesLeft, liveCell.movesLeft);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Arrays.hashCode(movesLeft);
+//    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LiveCell liveCell = (LiveCell) o;
-        return Arrays.equals(movesLeft, liveCell.movesLeft);
+        if (!(o instanceof LiveCell)) return false;
+        LiveCell cell = (LiveCell) o;
+        return x == cell.x && y == cell.y && Arrays.equals(movesLeft, cell.movesLeft);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(movesLeft);
+        int result = Objects.hash(x, y);
+        result = 31 * result + Arrays.hashCode(movesLeft);
+        return result;
     }
 }

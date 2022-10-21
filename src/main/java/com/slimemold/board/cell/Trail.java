@@ -2,11 +2,17 @@ package com.slimemold.board.cell;
 
 import javafx.scene.paint.Color;
 
-public class Trail extends Cell {
-    private Integer intensity = 70;
+import java.util.Objects;
 
-    public Trail(int[] direction, Color color) {
+public class Trail extends Cell {
+    private Integer intensity = 80;
+   public int x;
+   public int y;
+
+    public Trail(int[] direction, Color color,int x,int y) {
         super(direction, color);
+        this.x=x;
+        this.y=y;
     }
 
     public Integer getIntensity() {
@@ -32,5 +38,19 @@ public class Trail extends Cell {
             blue = 0;
         }
         this.color = Color.rgb(red, green, blue);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Trail)) return false;
+        if (!super.equals(o)) return false;
+        Trail trail = (Trail) o;
+        return x == trail.x && y == trail.y && Objects.equals(intensity, trail.intensity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), intensity, x, y);
     }
 }
