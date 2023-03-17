@@ -5,8 +5,8 @@ import javafx.scene.paint.Color;
 public class Trail extends Cell {
     private int intensity;
 
-    public Trail(Color color, int x, int y) {
-        super(color, x, y);
+    public Trail(Color color, int x, int y, int[] direction) {
+        super(color, x, y, direction);
         intensity = 50;
     }
 
