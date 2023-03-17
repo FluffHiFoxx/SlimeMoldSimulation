@@ -6,9 +6,9 @@ import java.util.Arrays;
 
 public class LiveCell extends Cell {
 
-    private int[] firstMove;
+    private final int[] firstMove;
 
-    private int[] secondMove;
+    private final int[] secondMove;
 
     private int stepCounter;
 
