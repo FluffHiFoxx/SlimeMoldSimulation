@@ -4,83 +4,64 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Board {
-    private final Set<LiveCell> liveCells;
-    private final Set<Trail> trails;
-    private final Cell[][] board;
-    private final int width;
-    private final int height;
+    private final Set<Cell> CELLS;
+    private final Cell[][] BOARD;
+    private final int WIDTH;
+    private final int HEIGHT;
 
     public Board(int width, int height) {
-        this.liveCells = new HashSet<>();
-        this.trails = new HashSet<>();
-        this.width = width;
-        this.height = height;
-        this.board = new Cell[height][width];
+        this.CELLS = new HashSet<>();
+        this.WIDTH = width;
+        this.HEIGHT = height;
+        this.BOARD = new Cell[height][width];
     }
 
     public void fillBoard() {
-        for (LiveCell liveCell : liveCells) {
-            board[liveCell.getyCoordinate()][liveCell.getxCoordinate()] = liveCell;
-        }
-        for (Trail trail : trails) {
-            board[trail.getyCoordinate()][trail.getxCoordinate()] = trail;
+        for (Cell cell : CELLS) {
+            BOARD[cell.getyCoordinate()][cell.getxCoordinate()] = cell;
         }
     }
 
-    public void moveCells() {
-        for (LiveCell cell : liveCells) {
-            cell.move(this);
+    public void handleCells() {
+        Set<Cell> cells = Set.copyOf(this.CELLS);
+        for (Cell cell : cells) {
+            if (cell instanceof LiveCell liveCell) {
+                liveCell.move(this);
+            } else if (cell instanceof Trail trail) {
+                trail.decrease(this);
+            }
         }
     }
 
-    public void fadeTrails() {
-        Set<Trail> trails = Set.copyOf(this.trails);
-        for (Trail trail : trails) {
-            trail.decrease(this);
-        }
-    }
-
-    public LiveCell getLiveCell(int x, int y) {
-        return liveCells.stream()
-                .filter(liveCell -> liveCell.getxCoordinate() == x && liveCell.getyCoordinate() == y)
-                .findFirst().orElse(null);
-    }
-
-    public Trail getTrail(int x, int y) {
-        return trails.stream()
-                .filter(trail -> trail.getxCoordinate() == x && trail.getyCoordinate() == y)
-                .findFirst().orElse(null);
-    }
-
-    public void addCell(LiveCell cell) {
-        liveCells.add(cell);
+    public void addCell(Cell cell) {
+        CELLS.add(cell);
     }
 
     public void addTrail(Trail trail) {
-        trails.add(trail);
+        CELLS.add(trail);
     }
 
     public void removeTrail(Trail trail) {
-        trails.remove(trail);
+        CELLS.remove(trail);
     }
 
     public int getWidth() {
-        return width;
+        return WIDTH;
     }
 
     public int getHeight() {
-        return height;
+        return HEIGHT;
     }
 
     public Cell[][] getBoard() {
-        return board;
+        return BOARD;
     }
 
     public Cell getCell(int y, int x) {
-        return board[y][x];
+        return BOARD[y][x];
     }
 
     public void setCell(int y, int x, Cell cell) {
-        board[y][x] = cell;
+        BOARD[y][x] = cell;
     }
 }
