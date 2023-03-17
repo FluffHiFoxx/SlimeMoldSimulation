@@ -3,7 +3,6 @@ package com.slimemold;
 import com.slimemold.board.Board;
 import com.slimemold.board.Cell;
 import com.slimemold.board.LiveCell;
-import com.slimemold.board.Trail;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -37,7 +36,7 @@ public class Main extends Application {
         this.WINDOW.setCenter(this.CANVAS);
         stage.setScene(scene);
         stage.show();
-        putCellsOnBoard(100);
+        putCellsOnBoard(500);
         render();
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
             handleContent();
@@ -54,28 +53,15 @@ public class Main extends Application {
 
     private void putCellsOnBoard(int amount) {
         Random rand = new Random();
-        int halfWidth = BOARD_WIDTH / 2;
-        int halfHeight = BOARD_HEIGHT / 2;
-
         for (int i = 0; i < amount; i++) {
-            switch (rand.nextInt(4)) {
-                case 0 -> {
-                    int x = halfWidth + i < BOARD_WIDTH && halfWidth + i > 0 ? halfWidth + i : halfWidth - i;
-                    BOARD.addCell(new LiveCell(Color.BLUE, x, halfHeight));
-                }
-                case 2 -> {
-                    int x = halfWidth - i > 0 ? halfWidth - i : halfWidth + i;
-                    BOARD.addCell(new LiveCell(Color.RED, x, halfHeight));
-                }
-                case 1 -> {
-                    int y = halfHeight + i < BOARD_HEIGHT && halfHeight + i > 0 ? halfHeight + i : halfHeight - i;
-                    BOARD.addCell(new LiveCell(Color.LIMEGREEN, halfWidth, y));
-                }
-                case 3 -> {
-                    int y = halfHeight - i > 0 ? halfHeight - i : halfHeight + i;
-                    BOARD.addCell(new LiveCell(Color.WHITE, halfWidth, y));
-                }
-            }
+            Color color = switch (rand.nextInt(4)) {
+                case 0 -> Color.BLUE;
+                case 2 -> Color.RED;
+                case 1 -> Color.LIMEGREEN;
+                case 3 -> Color.WHITE;
+                default -> throw new IllegalStateException("Unexpected value: " + rand.nextInt(4));
+            };
+            BOARD.addCell(new LiveCell(color, rand.nextInt(BOARD_WIDTH - 1), rand.nextInt(BOARD_HEIGHT - 1)));
         }
     }
 
