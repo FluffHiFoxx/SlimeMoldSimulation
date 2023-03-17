@@ -80,16 +80,12 @@ public class Main extends Application {
     }
 
     private void render() {
+        this.GRAPHICS.clearRect(0, 0, CANVAS.getWidth(), CANVAS.getHeight());
         this.GRAPHICS.setFill(Color.BLACK);
         this.GRAPHICS.fillRect(0, 0, CANVAS.getWidth(), CANVAS.getHeight());
-
         PixelWriter pixelWriter = CANVAS.getGraphicsContext2D().getPixelWriter();
-        for (int y = 0; y < BOARD_HEIGHT; y++) {
-            for (int x = 0; x < BOARD_WIDTH; x++) {
-                Cell cell = BOARD.getCell(y, x);
-                pixelWriter.setColor(x, y, cell instanceof LiveCell liveCell ? liveCell.getColor() :
-                        (cell instanceof Trail trail ? trail.getColor() : (Color) GRAPHICS.getFill()));
-            }
+        for (Cell cell : BOARD.getCells()) {
+            pixelWriter.setColor(cell.getxCoordinate(), cell.getyCoordinate(), cell.getColor());
         }
     }
 }

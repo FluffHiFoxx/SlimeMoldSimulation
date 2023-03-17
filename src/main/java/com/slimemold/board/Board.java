@@ -53,8 +53,8 @@ public class Board {
         return HEIGHT;
     }
 
-    public Cell[][] getBoard() {
-        return BOARD;
+    public Set<Cell> getCells() {
+        return CELLS;
     }
 
     public Cell getCell(int y, int x) {
