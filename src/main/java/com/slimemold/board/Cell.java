@@ -5,8 +5,10 @@ import javafx.scene.paint.Color;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
+import java.util.UUID;
 
 public abstract class Cell {
+    private final UUID ID = UUID.randomUUID();
     private static final int[] VECTOR_DIRECTIONS = {-2, -1, 0, 1, 2};
     private static final Random RANDOM = new Random();
     protected int[] direction;
@@ -66,13 +68,11 @@ public abstract class Cell {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cell cell = (Cell) o;
-        return yCoordinate == cell.yCoordinate && xCoordinate == cell.xCoordinate && Arrays.equals(direction, cell.direction) && Objects.equals(color, cell.color);
+        return yCoordinate == cell.yCoordinate && xCoordinate == cell.xCoordinate && Objects.equals(ID, cell.ID) && Arrays.equals(direction, cell.direction) && Objects.equals(color, cell.color);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(yCoordinate, xCoordinate, color);
-        result = 31 * result + Arrays.hashCode(direction);
-        return result;
+        return Objects.hash(ID);
     }
 }
