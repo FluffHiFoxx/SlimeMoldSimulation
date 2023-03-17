@@ -57,10 +57,6 @@ public class Board {
         return CELLS;
     }
 
-    public Cell getCell(int y, int x) {
-        return BOARD[y][x];
-    }
-
     public void setCell(int y, int x, Cell cell) {
         BOARD[y][x] = cell;
     }

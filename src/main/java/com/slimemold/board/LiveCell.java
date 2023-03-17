@@ -42,8 +42,6 @@ public class LiveCell extends Cell {
         }
         if (nextY >= 1 && nextY < maxY) {
             setyCoordinate(nextY);
-//        } else if (board.getBoard()) {
-
         } else {
             setyCoordinate(yCoordinate + bounceOff(1));
         }

@@ -29,8 +29,4 @@ public class Trail extends Cell {
             board.setCell(yCoordinate, xCoordinate, null);
         }
     }
-
-    public int getIntensity() {
-        return intensity;
-    }
 }
