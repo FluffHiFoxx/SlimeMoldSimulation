@@ -1,3 +1,4 @@
+
 package com.slimemold.board;
 
 import javafx.scene.paint.Color;
@@ -11,6 +12,8 @@ public class LiveCell extends Cell {
     private final int[] secondMove;
 
     private int stepCounter;
+
+    private boolean isFollowingOther = false;
 
 
     public LiveCell(Color color, int x, int y) {
@@ -45,11 +48,37 @@ public class LiveCell extends Cell {
 
     public void move(Board board) {
 
-        Trail trail = new Trail(this.getColor(), getxCoordinate(),
-                getyCoordinate(), this.direction);
-        board.setCell(getyCoordinate(), getxCoordinate(), trail);
-        board.addTrail(trail);
+        leaveTrail(board);
 
+        // get coord of nearby most intensive trail
+        int[] coordOfTrailnearby = getStrongestTrailCoordNearby(board);
+
+
+        if(isFollowingOther){
+            simpleMove(board);
+        }
+
+        if (coordOfTrailnearby != null) {
+
+            this.isFollowingOther = true;
+            // copy direction of nearby  most intensive trail and re-calculate first and second move
+            this.direction = board.getCell(coordOfTrailnearby[0], coordOfTrailnearby[1]).direction;
+            calculateMoves(direction);
+            // simply move to the nearby most intensive trail coord
+            this.yCoordinate = coordOfTrailnearby[0];
+            this.xCoordinate = coordOfTrailnearby[1];
+            board.setCell(getyCoordinate(), getxCoordinate(), this);
+        } else {
+            simpleMove(board);
+        }
+    }
+
+
+    public void changeDirection(int[] direction) {
+        this.direction = direction;
+    }
+
+    private  void simpleMove(Board board){
         if (stepCounter == 1) {
             this.setxCoordinate(getxCoordinate() + firstMove[0]);
             this.setyCoordinate(getyCoordinate() + firstMove[1]);
@@ -73,7 +102,7 @@ public class LiveCell extends Cell {
                 setxCoordinate(0);
                 direction[0] = -direction[0];
             } else if (getxCoordinate() >= board.getWidth() - 1) {
-                setxCoordinate(board.getWidth() -1 );
+                setxCoordinate(board.getWidth() - 1);
                 direction[0] = -direction[0];
             }
 
@@ -90,10 +119,13 @@ public class LiveCell extends Cell {
         }
     }
 
-
-    public void changeDirection(int[] direction) {
-        this.direction = direction;
+    private void leaveTrail(Board board){
+        Trail trail = new Trail(this.getColor(), getxCoordinate(),
+                getyCoordinate(), this.direction, ID);
+        board.setCell(getyCoordinate(), getxCoordinate(), trail);
+        board.addTrail(trail);
     }
+
 
     private void calculateMoves(int[] direction) {
         if (Math.abs(direction[0]) > 1) {
@@ -111,4 +143,34 @@ public class LiveCell extends Cell {
         this.secondMove[1] = direction[1] - this.firstMove[1];
     }
 
+
+
+
+    private int[] getStrongestTrailCoordNearby(Board board) {
+        // look around and get highest intensity trail which is related to other live cell
+        int[] trailCoordToFollow = null;
+        int highestintensityOfTrailNearby = 0;
+
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+
+                try {
+                    Cell nearbyCell = board.getCell(yCoordinate - 1 + i, xCoordinate - 1 + j);
+                    if (nearbyCell instanceof Trail
+                            && ((Trail) nearbyCell).getIdOfParentLiveCell() != ID
+                            && ((Trail) nearbyCell).getIntensity() > highestintensityOfTrailNearby
+
+                    ) {
+                        trailCoordToFollow = new int[2];
+                        trailCoordToFollow[0] = nearbyCell.yCoordinate;
+                        trailCoordToFollow[1] = nearbyCell.xCoordinate;
+                        highestintensityOfTrailNearby = ((Trail) nearbyCell).getIntensity();
+                    }
+                } catch (ArrayIndexOutOfBoundsException exception) {
+                }
+            }
+        }
+        return trailCoordToFollow;
+    }
 }

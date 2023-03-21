@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public abstract class Cell {
-    private final UUID ID = UUID.randomUUID();
+    protected final UUID ID = UUID.randomUUID();
     private static final int[] VECTOR_DIRECTIONS = {-2, -1, 0, 1, 2};
     private static final Random RANDOM = new Random();
     protected int[] direction;

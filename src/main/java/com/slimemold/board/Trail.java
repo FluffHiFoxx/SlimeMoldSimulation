@@ -2,12 +2,17 @@ package com.slimemold.board;
 
 import javafx.scene.paint.Color;
 
+import java.util.UUID;
+
 public class Trail extends Cell {
     private int intensity;
 
-    public Trail(Color color, int x, int y, int[] direction) {
+    private UUID idOfParentLiveCell;
+
+    public Trail(Color color, int x, int y, int[] direction, UUID id) {
         super(color, x, y, direction);
         intensity = 50;
+        idOfParentLiveCell = id;
     }
 
     public void decrease(Board board) {
@@ -28,5 +33,13 @@ public class Trail extends Cell {
             board.removeTrail(this);
             board.setCell(yCoordinate, xCoordinate, null);
         }
+    }
+
+    public int getIntensity() {
+        return intensity;
+    }
+
+    public UUID getIdOfParentLiveCell() {
+        return idOfParentLiveCell;
     }
 }

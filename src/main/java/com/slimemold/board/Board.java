@@ -60,4 +60,12 @@ public class Board {
     public void setCell(int y, int x, Cell cell) {
         BOARD[y][x] = cell;
     }
+
+    public Cell getCell(int y, int x){
+        return BOARD[y][x];
+    }
+
+    public boolean isTrail(int y, int x){
+        return getCell(y, x) instanceof Trail;
+    }
 }

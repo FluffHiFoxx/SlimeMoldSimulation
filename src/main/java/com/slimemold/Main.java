@@ -36,9 +36,9 @@ public class Main extends Application {
         this.WINDOW.setCenter(this.CANVAS);
         stage.setScene(scene);
         stage.show();
-        putCellsOnBoard(500);
+        putCellsOnBoard(200);
         render();
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.015), e -> {
             handleContent();
             render();
         }));
@@ -55,10 +55,10 @@ public class Main extends Application {
         Random rand = new Random();
         for (int i = 0; i < amount; i++) {
             Color color = switch (rand.nextInt(4)) {
-                case 0 -> Color.BLUE;
-                case 2 -> Color.RED;
+                case 0 -> Color.CYAN;
+                case 2 -> Color.CYAN;
                 case 1 -> Color.LIMEGREEN;
-                case 3 -> Color.WHITE;
+                case 3 -> Color.LIMEGREEN;
                 default -> throw new IllegalStateException("Unexpected value: " + rand.nextInt(4));
             };
             BOARD.addCell(new LiveCell(color, rand.nextInt(BOARD_WIDTH - 1), rand.nextInt(BOARD_HEIGHT - 1)));
