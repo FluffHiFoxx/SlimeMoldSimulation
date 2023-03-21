@@ -48,13 +48,14 @@ public class LiveCell extends Cell {
 
     public void move(Board board) {
 
-        leaveTrail(board);
+
 
         // get coord of nearby most intensive trail
         int[] coordOfTrailnearby = getStrongestTrailCoordNearby(board);
 
 
         if(isFollowingOther){
+            leaveTrail(board);
             simpleMove(board);
         }
 
@@ -67,8 +68,10 @@ public class LiveCell extends Cell {
             // simply move to the nearby most intensive trail coord
             this.yCoordinate = coordOfTrailnearby[0];
             this.xCoordinate = coordOfTrailnearby[1];
+            leaveTrail(board);
             board.setCell(getyCoordinate(), getxCoordinate(), this);
         } else {
+            leaveTrail(board);
             simpleMove(board);
         }
     }
