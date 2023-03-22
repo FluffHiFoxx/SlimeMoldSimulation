@@ -88,7 +88,7 @@ public class LiveCell extends Cell {
             firstMove[0] = direction[0];
             this.secondMove[0] = this.firstMove[0];
         }
-        if (Math.abs(direction[0]) > 1) {
+        if (Math.abs(direction[1]) > 1) {
             firstMove[1] = direction[1] / 2;
             this.secondMove[1] = direction[1] - this.firstMove[1];
         } else {
@@ -96,5 +96,4 @@ public class LiveCell extends Cell {
             this.secondMove[1] = this.firstMove[1];
         }
     }
-
 }
