@@ -52,7 +52,6 @@ public class LiveCell extends Cell {
         } else {
             this.setxCoordinate(getxCoordinate() + secondMove[0]);
             this.setyCoordinate(getyCoordinate() + secondMove[1]);
-
             this.stepCounter -= 1;
         }
 
@@ -77,7 +76,6 @@ public class LiveCell extends Cell {
         }
     }
 
-
     public void changeDirection(int[] direction) {
         this.direction = direction;
     }
@@ -85,17 +83,18 @@ public class LiveCell extends Cell {
     private void calculateMoves(int[] direction) {
         if (Math.abs(direction[0]) > 1) {
             firstMove[0] = direction[0] / 2;
+            this.secondMove[0] = direction[0] - this.firstMove[0];
         } else {
             firstMove[0] = direction[0];
+            this.secondMove[0] = this.firstMove[0];
         }
         if (Math.abs(direction[0]) > 1) {
             firstMove[1] = direction[1] / 2;
+            this.secondMove[1] = direction[1] - this.firstMove[1];
         } else {
             firstMove[1] = direction[1];
+            this.secondMove[1] = this.firstMove[1];
         }
-        // setting second move
-        this.secondMove[0] = direction[0] - this.firstMove[0];
-        this.secondMove[1] = direction[1] - this.firstMove[1];
     }
 
 }
