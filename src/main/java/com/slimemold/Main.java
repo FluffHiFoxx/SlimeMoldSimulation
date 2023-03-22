@@ -48,7 +48,6 @@ public class Main extends Application {
 
     private void handleContent() {
         BOARD.handleCells();
-        BOARD.fillBoard();
     }
 
     private void putCellsOnBoard(int amount) {

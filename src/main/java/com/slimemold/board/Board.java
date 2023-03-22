@@ -1,11 +1,13 @@
 package com.slimemold.board;
 
+import javafx.scene.paint.Color;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class Board {
     private final Set<Cell> CELLS;
-    private final Cell[][] BOARD;
+    private final Trail[][] BOARD;
     private final int WIDTH;
     private final int HEIGHT;
 
@@ -13,13 +15,7 @@ public class Board {
         this.CELLS = new HashSet<>();
         this.WIDTH = width;
         this.HEIGHT = height;
-        this.BOARD = new Cell[height][width];
-    }
-
-    public void fillBoard() {
-        for (Cell cell : CELLS) {
-            BOARD[cell.getyCoordinate()][cell.getxCoordinate()] = cell;
-        }
+        this.BOARD = new Trail[height][width];
     }
 
     public void handleCells() {
@@ -38,11 +34,26 @@ public class Board {
     }
 
     public void addTrail(Trail trail) {
-        CELLS.add(trail);
+        if (BOARD[trail.yCoordinate][trail.xCoordinate] != null) {
+            Color trailColor = trail.getColor();
+            Color boardColor = BOARD[trail.yCoordinate][trail.xCoordinate].getColor();
+            CELLS.remove(BOARD[trail.yCoordinate][trail.xCoordinate]);
+            double r = trailColor.getRed() + boardColor.getRed();
+            double g = trailColor.getGreen() + boardColor.getGreen();
+            double b = trailColor.getBlue() + boardColor.getBlue();
+            Color color = Color.color(Math.min(1,r), Math.min(1,g), Math.min(1,b));
+            Trail newTrail = new Trail(color, trail.xCoordinate, trail.yCoordinate, trail.getDirection());
+            BOARD[trail.yCoordinate][trail.xCoordinate] = newTrail;
+            CELLS.add(newTrail);
+        } else {
+            CELLS.add(trail);
+            BOARD[trail.yCoordinate][trail.xCoordinate] = trail;
+        }
     }
 
     public void removeTrail(Trail trail) {
         CELLS.remove(trail);
+        BOARD[trail.yCoordinate][trail.xCoordinate] = null;
     }
 
     public int getWidth() {
@@ -57,8 +68,8 @@ public class Board {
         return CELLS;
     }
 
-    public void setCell(int y, int x, Cell cell) {
-        BOARD[y][x] = cell;
+    public Cell getCell(int y, int x) {
+        return BOARD[y][x];
     }
 
     public Cell getCell(int y, int x){

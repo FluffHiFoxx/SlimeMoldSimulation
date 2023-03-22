@@ -1,4 +1,3 @@
-
 package com.slimemold.board;
 
 import javafx.scene.paint.Color;
@@ -91,29 +90,29 @@ public class LiveCell extends Cell {
 
             this.stepCounter -= 1;
         }
-        // change direction and re-calculate move if
-        if (getxCoordinate() < 0) {
-            setxCoordinate(0);
-            direction[0] = -direction[0];
-            calculateMoves(this.direction);
-        } else if (getxCoordinate() >= board.getWidth() - 1) {
-            setxCoordinate(board.getWidth() - 1);
-            direction[0] = -direction[0];
+
+        if (getxCoordinate() < 0 || getxCoordinate() >= board.getWidth() ||
+                getyCoordinate() < 0 || getyCoordinate() >= board.getHeight()) {
+            // change direction
+            if (getxCoordinate() < 0) {
+                setxCoordinate(0);
+                direction[0] = -direction[0];
+            } else if (getxCoordinate() >= board.getWidth() - 1) {
+                setxCoordinate(board.getWidth() - 1);
+                direction[0] = -direction[0];
+            }
+            if (getyCoordinate() < 0) {
+                setyCoordinate(0);
+                direction[1] = -direction[1];
+            } else if (getyCoordinate() >= board.getHeight() - 1) {
+                setyCoordinate(board.getHeight() - 1);
+                direction[1] = -direction[1];
+            }
             calculateMoves(this.direction);
         }
-
-        if (getyCoordinate() < 0) {
-            setyCoordinate(0);
-            direction[1] = -direction[1];
-            calculateMoves(this.direction);
-        } else if (getyCoordinate() >= board.getHeight() - 1) {
-            setyCoordinate(board.getHeight() - 1);
-            direction[1] = -direction[1];
-            calculateMoves(this.direction);
-        }
-
-
     }
+
+
 
     private void leaveTrail(Board board) {
         Trail trail = new Trail(this.getColor(), getxCoordinate(),
@@ -122,21 +121,21 @@ public class LiveCell extends Cell {
         board.addTrail(trail);
     }
 
-
     private void calculateMoves(int[] direction) {
         if (Math.abs(direction[0]) > 1) {
             firstMove[0] = direction[0] / 2;
+            this.secondMove[0] = direction[0] - this.firstMove[0];
         } else {
             firstMove[0] = direction[0];
+            this.secondMove[0] = this.firstMove[0];
         }
         if (Math.abs(direction[0]) > 1) {
             firstMove[1] = direction[1] / 2;
+            this.secondMove[1] = direction[1] - this.firstMove[1];
         } else {
             firstMove[1] = direction[1];
+            this.secondMove[1] = this.firstMove[1];
         }
-        // setting second move
-        this.secondMove[0] = direction[0] - this.firstMove[0];
-        this.secondMove[1] = direction[1] - this.firstMove[1];
     }
 
 
