@@ -48,16 +48,13 @@ public class LiveCell extends Cell {
 
     public void move(Board board) {
 
-
-
-        // get coord of nearby most intensive trail
-        int[] coordOfTrailnearby = getStrongestTrailCoordNearby(board);
-
-
-        if(isFollowingOther){
+        if (isFollowingOther) {
             leaveTrail(board);
             simpleMove(board);
         }
+
+        // get coord of nearby most intensive trail
+        int[] coordOfTrailnearby = getStrongestTrailCoordNearby(board);
 
         if (coordOfTrailnearby != null) {
 
@@ -68,7 +65,7 @@ public class LiveCell extends Cell {
             // simply move to the nearby most intensive trail coord
             this.yCoordinate = coordOfTrailnearby[0];
             this.xCoordinate = coordOfTrailnearby[1];
-            leaveTrail(board);
+            //leaveTrail(board);
             board.setCell(getyCoordinate(), getxCoordinate(), this);
         } else {
             leaveTrail(board);
@@ -81,7 +78,7 @@ public class LiveCell extends Cell {
         this.direction = direction;
     }
 
-    private  void simpleMove(Board board){
+    private void simpleMove(Board board) {
         if (stepCounter == 1) {
             this.setxCoordinate(getxCoordinate() + firstMove[0]);
             this.setyCoordinate(getyCoordinate() + firstMove[1]);
@@ -94,35 +91,31 @@ public class LiveCell extends Cell {
 
             this.stepCounter -= 1;
         }
-
-        if (getxCoordinate() >= 0 && getxCoordinate() < board.getWidth() &&
-                getyCoordinate() >= 0 && getyCoordinate() < board.getHeight()) {
-
-            board.setCell(getyCoordinate(), getxCoordinate(), this);
-        } else {
-            // change direction
-            if (getxCoordinate() < 0) {
-                setxCoordinate(0);
-                direction[0] = -direction[0];
-            } else if (getxCoordinate() >= board.getWidth() - 1) {
-                setxCoordinate(board.getWidth() - 1);
-                direction[0] = -direction[0];
-            }
-
-            if (getyCoordinate() < 0) {
-                setyCoordinate(0);
-                direction[1] = -direction[1];
-            } else if (getyCoordinate() >= board.getHeight() - 1) {
-                setyCoordinate(board.getHeight() - 1);
-                direction[1] = -direction[1];
-            }
-
+        // change direction and re-calculate move if
+        if (getxCoordinate() < 0) {
+            setxCoordinate(0);
+            direction[0] = -direction[0];
             calculateMoves(this.direction);
-            board.setCell(getyCoordinate(), getxCoordinate(), this);
+        } else if (getxCoordinate() >= board.getWidth() - 1) {
+            setxCoordinate(board.getWidth() - 1);
+            direction[0] = -direction[0];
+            calculateMoves(this.direction);
         }
+
+        if (getyCoordinate() < 0) {
+            setyCoordinate(0);
+            direction[1] = -direction[1];
+            calculateMoves(this.direction);
+        } else if (getyCoordinate() >= board.getHeight() - 1) {
+            setyCoordinate(board.getHeight() - 1);
+            direction[1] = -direction[1];
+            calculateMoves(this.direction);
+        }
+
+
     }
 
-    private void leaveTrail(Board board){
+    private void leaveTrail(Board board) {
         Trail trail = new Trail(this.getColor(), getxCoordinate(),
                 getyCoordinate(), this.direction, ID);
         board.setCell(getyCoordinate(), getxCoordinate(), trail);
@@ -145,8 +138,6 @@ public class LiveCell extends Cell {
         this.secondMove[0] = direction[0] - this.firstMove[0];
         this.secondMove[1] = direction[1] - this.firstMove[1];
     }
-
-
 
 
     private int[] getStrongestTrailCoordNearby(Board board) {
