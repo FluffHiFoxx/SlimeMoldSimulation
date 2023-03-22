@@ -42,7 +42,7 @@ public class Board {
             double g = trailColor.getGreen() + boardColor.getGreen();
             double b = trailColor.getBlue() + boardColor.getBlue();
             Color color = Color.color(Math.min(1,r), Math.min(1,g), Math.min(1,b));
-            Trail newTrail = new Trail(color, trail.xCoordinate, trail.yCoordinate, trail.getDirection());
+            Trail newTrail = new Trail(color, trail.xCoordinate, trail.yCoordinate, trail.getDirection(), trail.getIdOfParentLiveCell());
             BOARD[trail.yCoordinate][trail.xCoordinate] = newTrail;
             CELLS.add(newTrail);
         } else {
@@ -69,10 +69,6 @@ public class Board {
     }
 
     public Cell getCell(int y, int x) {
-        return BOARD[y][x];
-    }
-
-    public Cell getCell(int y, int x){
         return BOARD[y][x];
     }
 

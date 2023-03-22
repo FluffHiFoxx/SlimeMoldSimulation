@@ -36,9 +36,9 @@ public class Main extends Application {
         this.WINDOW.setCenter(this.CANVAS);
         stage.setScene(scene);
         stage.show();
-        putCellsOnBoard(200);
+        putCellsOnBoard(20);
         render();
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.015), e -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.05), e -> {
             handleContent();
             render();
         }));

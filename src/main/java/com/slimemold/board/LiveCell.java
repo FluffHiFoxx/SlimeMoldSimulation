@@ -64,8 +64,7 @@ public class LiveCell extends Cell {
             // simply move to the nearby most intensive trail coord
             this.yCoordinate = coordOfTrailnearby[0];
             this.xCoordinate = coordOfTrailnearby[1];
-            //leaveTrail(board);
-            board.setCell(getyCoordinate(), getxCoordinate(), this);
+
         } else {
             leaveTrail(board);
             simpleMove(board);
@@ -117,7 +116,6 @@ public class LiveCell extends Cell {
     private void leaveTrail(Board board) {
         Trail trail = new Trail(this.getColor(), getxCoordinate(),
                 getyCoordinate(), this.direction, ID);
-        board.setCell(getyCoordinate(), getxCoordinate(), trail);
         board.addTrail(trail);
     }
 
@@ -143,13 +141,16 @@ public class LiveCell extends Cell {
         // look around and get highest intensity trail which is related to other live cell
         int[] trailCoordToFollow = null;
         int highestintensityOfTrailNearby = 0;
+        // calculate the next step of this Live Cell
+        int nextXCoord = stepCounter == 1 ? xCoordinate + firstMove[0] : xCoordinate + secondMove[0];
+        int nextYCoord = stepCounter == 1 ? yCoordinate + firstMove[1] : yCoordinate + secondMove[1];
 
-
+        // look around the next step of this Live Cell
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
 
                 try {
-                    Cell nearbyCell = board.getCell(yCoordinate - 1 + i, xCoordinate - 1 + j);
+                    Cell nearbyCell = board.getCell(nextYCoord - 1 + i, nextXCoord - 1 + j);
                     if (nearbyCell instanceof Trail
                             && ((Trail) nearbyCell).getIdOfParentLiveCell() != ID
                             && ((Trail) nearbyCell).getIntensity() > highestintensityOfTrailNearby
