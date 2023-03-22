@@ -35,27 +35,20 @@ public class LiveCell extends Cell {
             direction[1] = 2 * (Math.abs(direction[0]) / direction[1]);
         }
         this.direction = direction;
-
         this.firstMove = new int[2];
         this.secondMove = new int[2];
-
         calculateMoves(direction);
         this.stepCounter = 1;
     }
 
     public void move(Board board) {
-
         Trail trail = new Trail(this.getColor(), getxCoordinate(),
                 getyCoordinate(), this.direction);
-        board.setCell(getyCoordinate(), getxCoordinate(), trail);
         board.addTrail(trail);
-
         if (stepCounter == 1) {
             this.setxCoordinate(getxCoordinate() + firstMove[0]);
             this.setyCoordinate(getyCoordinate() + firstMove[1]);
-
             this.stepCounter += 1;
-
         } else {
             this.setxCoordinate(getxCoordinate() + secondMove[0]);
             this.setyCoordinate(getyCoordinate() + secondMove[1]);
@@ -63,20 +56,16 @@ public class LiveCell extends Cell {
             this.stepCounter -= 1;
         }
 
-        if (getxCoordinate() >= 0 && getxCoordinate() < board.getWidth() &&
-                getyCoordinate() >= 0 && getyCoordinate() < board.getHeight()) {
-
-            board.setCell(getyCoordinate(), getxCoordinate(), this);
-        } else {
+        if (getxCoordinate() < 0 || getxCoordinate() >= board.getWidth() ||
+                getyCoordinate() < 0 || getyCoordinate() >= board.getHeight()) {
             // change direction
             if (getxCoordinate() < 0) {
                 setxCoordinate(0);
                 direction[0] = -direction[0];
             } else if (getxCoordinate() >= board.getWidth() - 1) {
-                setxCoordinate(board.getWidth() -1 );
+                setxCoordinate(board.getWidth() - 1);
                 direction[0] = -direction[0];
             }
-
             if (getyCoordinate() < 0) {
                 setyCoordinate(0);
                 direction[1] = -direction[1];
@@ -84,9 +73,7 @@ public class LiveCell extends Cell {
                 setyCoordinate(board.getHeight() - 1);
                 direction[1] = -direction[1];
             }
-
             calculateMoves(this.direction);
-            board.setCell(getyCoordinate(), getxCoordinate(), this);
         }
     }
 

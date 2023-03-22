@@ -26,7 +26,6 @@ public class Trail extends Cell {
             setColor(Color.rgb(red, green, blue));
         } else {
             board.removeTrail(this);
-            board.setCell(yCoordinate, xCoordinate, null);
         }
     }
 }

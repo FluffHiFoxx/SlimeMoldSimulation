@@ -63,6 +63,10 @@ public abstract class Cell {
         this.xCoordinate = xCoordinate;
     }
 
+    public int[] getDirection() {
+        return direction;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

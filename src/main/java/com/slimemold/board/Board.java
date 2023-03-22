@@ -16,12 +16,6 @@ public class Board {
         this.BOARD = new Cell[height][width];
     }
 
-    public void fillBoard() {
-        for (Cell cell : CELLS) {
-            BOARD[cell.getyCoordinate()][cell.getxCoordinate()] = cell;
-        }
-    }
-
     public void handleCells() {
         Set<Cell> cells = Set.copyOf(this.CELLS);
         for (Cell cell : cells) {
@@ -57,7 +51,7 @@ public class Board {
         return CELLS;
     }
 
-    public void setCell(int y, int x, Cell cell) {
-        BOARD[y][x] = cell;
+    public Cell getCell(int y, int x) {
+        return BOARD[y][x];
     }
 }
